@@ -1,26 +1,21 @@
-import {useEffect} from 'react'
-
 import './App.css'
-import Card from "./components/common/card";
+import { Route, Routes } from 'react-router';
+import Layout from './components/Layout';
+import Home from './pages/Home';
+import Settings from './pages/Settings';
+import Contacts from './pages/Contacts';
+
 
 function App() {
-
-    useEffect(() => {
-        console.log("Use Effect!");
-    }, []);
-
-    console.log("Render component :)");
-
     return (
         <>
-            <button type="button"
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Default
-            </button>
-
-            <Card/>
-            <h1 className="text-center text-3xl font-bold underline">
-                Hello world!
-            </h1>
+            <Routes>
+                <Route path="/" element={<Layout />}>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/contacts" element={<Contacts />} />
+                    <Route path="/settings" element={<Settings />} />
+                </Route>
+            </Routes>
         </>
     )
 }
