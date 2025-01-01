@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+from decouple import config
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,10 +20,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!@(p=7p(9)zp&b&)wml1t38lt-walg26_29uswbq5693_g-4$5'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -76,12 +76,12 @@ WSGI_APPLICATION = 'snAPI.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'SocialNetworkDb_ateorbitme',
-        'USER': 'SocialNetworkDb_ateorbitme', 
-        'PASSWORD': '3e5f97fd9e5cb2e02929febd496206fd1ea9852e',
-        'HOST': 'u5pfc.h.filess.io',
-        'PORT': '3305', 
-        'OPCIONS':{'sql_mode':'traditional'}
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT'),
+        'OPTIONS': {'sql_mode': 'traditional'}
     }
 }
 
