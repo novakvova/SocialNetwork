@@ -1,5 +1,10 @@
 @echo off
 
+:: Clone the repository
+echo Cloning the repository...
+git clone https://github.com/novakvova/SocialNetwork
+cd SocialNetwork
+
 :: Create the virtual environment
 echo Creating virtual environment...
 py -m venv .venv
@@ -10,6 +15,7 @@ call .venv\Scripts\activate.bat
 
 :: Install dependencies
 echo Installing dependencies...
+cd snAPI
 pip install Django
 py -m pip install -U pip
 pip install -r requirements.txt
