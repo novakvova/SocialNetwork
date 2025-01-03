@@ -52,5 +52,8 @@ py manage.py shell
 cd blog
 py manage.py runserver 9178
 deactivate
-
 pip install Pillow
+pip install djangorestframework
+pip install djangorestframework djangorestframework-simplejwt
+--------------------------
+start-project.bat
