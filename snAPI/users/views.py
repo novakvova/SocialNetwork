@@ -3,7 +3,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
-from .serializers import UserSerializer
+from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
+from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class UserList(APIView):
     @swagger_auto_schema(
@@ -14,13 +16,37 @@ class UserList(APIView):
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
 
+class RegisterView(APIView):
     @swagger_auto_schema(
-        request_body=UserSerializer,
-        responses={201: UserSerializer, 400: "Invalid data"}
+        request_body=RegisterSerializer,
+        responses={201: RegisterSerializer, 400: "Invalid data"}
     )
     def post(self, request):
-        serializer = UserSerializer(data=request.data)
+        serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            user = serializer.save()  
+            return Response({"status": "success", "user": UserSerializer(user).data}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class LoginView(APIView):
+    @swagger_auto_schema(
+        request_body=LoginSerializer,  
+        responses={200: 'JWT tokens', 400: 'Invalid credentials'}
+    )
+    def post(self, request):
+        # Отримуємо дані для входу (username та password)
+        username = request.data.get("username")
+        password = request.data.get("password")
+        
+        user = authenticate(username=username, password=password)
+        
+        if user is not None:
+            # Генеруємо токен
+            refresh = RefreshToken.for_user(user)
+            access_token = refresh.access_token
+            return Response({
+                'access': str(access_token),
+                'refresh': str(refresh)
+            }, status=status.HTTP_200_OK)
+        
+        return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
