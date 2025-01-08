@@ -1,0 +1,13 @@
+django-widget-tweaks
+djangorestframework
+djangorestframework-simplejwt
+drf-yasg
+mariadb
+mysqlclient
+packaging
+pillow
+PyJWT
+python-decouple
+sqlparse
+tzdata
+django-cors-headers

@@ -49,8 +49,13 @@ py manage.py shell
 >>>Post.objects.all()
 >>>exit()
 .venv\Scripts\activate.bat
-cd blog
+cd snAPI
 py manage.py runserver 9178
 deactivate
-
 pip install Pillow
+pip install djangorestframework
+pip install djangorestframework djangorestframework-simplejwt
+pip install django-cors-headers
+
+--------------------------
+start-project.bat
