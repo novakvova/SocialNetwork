@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useGetContactsQuery } from '../services/api';
+import { useGetContactsQuery } from '../services/apiUser';
 
 const Contacts: React.FC = () => {
     const { data, isLoading, error } = useGetContactsQuery();

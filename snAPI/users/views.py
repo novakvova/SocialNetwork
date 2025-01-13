@@ -34,16 +34,18 @@ class LoginView(APIView):
         responses={200: 'JWT tokens', 400: 'Invalid credentials'}
     )
     def post(self, request):
-        # Отримуємо дані для входу (username та password)
-        username = request.data.get("username")
+        email = request.data.get("email")
         password = request.data.get("password")
         
-        user = authenticate(username=username, password=password)
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
         
-        if user is not None:
-            # Генеруємо токен
+        if user.check_password(password):
             refresh = RefreshToken.for_user(user)
             access_token = refresh.access_token
+            access_token['email'] = user.email
             return Response({
                 'access': str(access_token),
                 'refresh': str(refresh)

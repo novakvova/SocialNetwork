@@ -4,6 +4,8 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import Settings from './pages/Settings';
 import Contacts from './pages/Contacts';
+import RegisterForm from './components/RegistrationForm';
+import LoginForm from './components/LoginForm';
 
 
 function App() {
@@ -14,6 +16,8 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/contacts" element={<Contacts />} />
                     <Route path="/settings" element={<Settings />} />
+                    <Route path="/login" element={<LoginForm />} />
+                    <Route path="/register" element={<RegisterForm />} />
                 </Route>
             </Routes>
         </>

@@ -4,7 +4,11 @@
 npm install -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
 npm run dev
-
+npm install @reduxjs/toolkit react-redux
+npm install --save-dev @types/react-redux
+npm install jwt-decode
+npm install antd
+cd my-react
 ```
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
