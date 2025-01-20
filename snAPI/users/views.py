@@ -7,7 +7,7 @@ from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from drf_yasg import openapi
-
+from rest_framework.generics import RetrieveAPIView
 class UserList(APIView):
     @swagger_auto_schema(
         responses={200: UserSerializer(many=True)},
@@ -16,6 +16,11 @@ class UserList(APIView):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
+    
+class UserDetailView(RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    #permission_classes = [IsAuthenticated]
 
 class RegisterView(APIView):
     @swagger_auto_schema(
