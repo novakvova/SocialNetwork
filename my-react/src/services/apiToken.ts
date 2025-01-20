@@ -21,8 +21,12 @@ export const apiToken = {
             const payload = jwtDecode<TokenPayloadItems>(token);
             return {
                 id: payload["user_id"],
+                username: payload["username"],
                 email: payload["email"],
                 role: payload["role"],
+                birthDate: payload["birth_date"],
+                phoneNumber: payload["phone_number"]
+
             };
         } catch (error) {
             console.error("Failed to decode token:", error);

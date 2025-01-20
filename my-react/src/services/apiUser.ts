@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Contact} from '../types';
 import {APP_ENV} from "../env";
 import { RegisterField } from '../models/accounts';
+
 export const api = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({ baseUrl: APP_ENV.REMOTE_BASE_URL }),
@@ -9,6 +10,9 @@ export const api = createApi({
         getContacts: builder.query<Contact[], void>({
             query: () => 'users',
         }),
+        getUserInfo: builder.query<any[], string>({
+          query: () => 'user',
+      }),
         registerUser: builder.mutation({
             query: (data: RegisterField) => ({
               url: "register/", 
@@ -31,8 +35,14 @@ export const api = createApi({
                 body: data,
             }),
         }),
+        search: builder.query<any[], string>({
+          query: (query) => `search?query=${encodeURIComponent(query)}`,
+        }),
+        getRecommendations: builder.query<string[], void>({
+          query: () => 'recommendations',
+        }),
     }),
     
 });
 
-export const { useGetContactsQuery, useRegisterUserMutation, useLoginUserMutation } = api;
+export const { useGetContactsQuery, useRegisterUserMutation, useLoginUserMutation, useLazySearchQuery, useGetRecommendationsQuery } = api;
