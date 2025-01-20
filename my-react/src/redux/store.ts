@@ -1,14 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { api } from '../services/apiUser'; 
-import accountSlice from "./account/accountSlice"
+import accountSlice from './account/accountSlice'; 
+import { apiGroup } from '../services/apiGroup';
+import { api } from '../services/apiUser';
 
 export const store = configureStore({
   reducer: {
-    [api.reducerPath]: api.reducer, 
     account: accountSlice,
+    [apiGroup.reducerPath]: apiGroup.reducer, 
+    [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware), 
+    getDefaultMiddleware()
+      .concat(api.middleware) 
+      .concat(apiGroup.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
