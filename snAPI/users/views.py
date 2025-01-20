@@ -6,6 +6,7 @@ from drf_yasg.utils import swagger_auto_schema
 from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+from drf_yasg import openapi
 
 class UserList(APIView):
     @swagger_auto_schema(
@@ -30,8 +31,17 @@ class RegisterView(APIView):
 
 class LoginView(APIView):
     @swagger_auto_schema(
-        request_body=LoginSerializer,  
-        responses={200: 'JWT tokens', 400: 'Invalid credentials'}
+        request_body=LoginSerializer,
+        responses={
+            200: openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'access': openapi.Schema(type=openapi.TYPE_STRING),
+                    'refresh': openapi.Schema(type=openapi.TYPE_STRING),
+                }
+            ),
+            400: "Invalid credentials",
+        }
     )
     def post(self, request):
         email = request.data.get("email")

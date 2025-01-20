@@ -28,13 +28,13 @@ SuperAdminKrot1-.venv\Scripts\activate.bat
 pip install mysqlclient
 pip install mariadb
 pip install django-widget-tweaks
-cd blog
+
 python manage.py migrate
 
 https://dash.filess.io/#/app/databases
 
 .venv\Scripts\activate.bat
-cd blog
+cd snAPI
 python manage.py startapp posts
 py manage.py makemigrations
 python manage.py migrate

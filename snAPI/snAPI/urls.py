@@ -20,6 +20,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from django.conf import settings
+from django.conf.urls.static import static
 
 # Schema view for Swagger documentation
 schema_view = get_schema_view(
@@ -31,7 +33,7 @@ schema_view = get_schema_view(
         contact=openapi.Contact(email="contact@snapi.local"),
         license=openapi.License(name="BSD License"),
     ),
-    public=True,
+    public=False,
     permission_classes=(permissions.AllowAny,),
 )
 
@@ -48,4 +50,8 @@ urlpatterns = [
     
     # User app endpoints
     path('api/', include('users.urls')),
+    path('api/groups/', include('groups.urls')), 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
