@@ -11,3 +11,9 @@ python-decouple
 sqlparse
 tzdata
 django-cors-headers
+asgiref
+inflection
+pytz
+PyYAML
+tzdata
+uritemplate
