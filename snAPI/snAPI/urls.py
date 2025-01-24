@@ -23,6 +23,7 @@ from drf_yasg import openapi
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 # Schema view for Swagger documentation
 schema_view = get_schema_view(
     openapi.Info(
@@ -51,6 +52,12 @@ urlpatterns = [
     # User app endpoints
     path('api/', include('users.urls')),
     path('api/groups/', include('groups.urls')), 
+
+    #posts
+    
+    path('api/posts/', include('posts.urls'))
+
+    
 ]
 
 if settings.DEBUG:

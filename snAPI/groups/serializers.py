@@ -3,6 +3,9 @@ from .models import Group, GroupMembership
 from django.contrib.auth.models import User
 
 
+
+
+
 class GroupMembershipSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField()
     role = serializers.ChoiceField(choices=GroupMembership.ROLE_CHOICES)
