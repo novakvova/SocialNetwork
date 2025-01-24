@@ -3,8 +3,8 @@ import {
     HomeIcon, 
     UserGroupIcon, 
     AdjustmentsHorizontalIcon, 
-    ArrowLeftOnRectangleIcon,
-    ArrowRightOnRectangleIcon,
+    ArrowLeftEndOnRectangleIcon,
+    ArrowRightStartOnRectangleIcon,
     IdentificationIcon 
 } from '@heroicons/react/24/solid';
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
@@ -30,7 +30,7 @@ const Navbar: React.FC = () => {
     const handleMenuClick = (path: string) => {
         setCurrent(path);
     };
-
+    
     return (
         <div className="w-full bg-white shadow-md text-gray-800">
             <div className="container mx-auto flex items-center justify-between h-16 px-4">
@@ -80,7 +80,7 @@ const Navbar: React.FC = () => {
                                 onClick={handleLogout}
                                 className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
                             >
-                                <ArrowLeftOnRectangleIcon className="h-5 w-5" />
+                                <ArrowRightStartOnRectangleIcon className="h-5 w-5" />
                                 <span>Logout</span>
                             </button>
                         </>
@@ -91,7 +91,7 @@ const Navbar: React.FC = () => {
                                 className={`flex items-center space-x-2 ${current === '/login' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
                                 onClick={() => handleMenuClick('/login')}
                             >
-                                <ArrowRightOnRectangleIcon className="h-5 w-5" />
+                                <ArrowLeftEndOnRectangleIcon className="h-5 w-5" />
                                 <span>Login</span>
                             </Link>
                             <Link 

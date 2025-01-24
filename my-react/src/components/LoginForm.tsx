@@ -18,7 +18,7 @@ const LoginForm = () => {
           const response = await loginUser({ email: values.email, password: values.password }).unwrap();
           if (response.access) {
               // Зберігаємо токен для подальшого використання
-              apiAccount.login(response.access);
+              apiAccount.login(response.access, response.refresh);
               message.success("Успішний вхід!");
               const payload = apiToken.getPayload();
                 if (payload) dispatch(setAccount(payload));
@@ -27,7 +27,6 @@ const LoginForm = () => {
           }
       } catch (error: unknown) {
           if (error instanceof Error) {
-              // Тепер ви можете доступитись до властивостей помилки
               if (error?.message === "401") {
                   message.error("Невірний логін або пароль");
               } else {
