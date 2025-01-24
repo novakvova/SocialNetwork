@@ -9,6 +9,10 @@ import LoginForm from './components/LoginForm';
 import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
 import SearchPage from './pages/Search';
+import GroupsListPage from './pages/Groups/GroupsList';
+import CreateGroupPage from './pages/Groups/CreateGroup';
+import EditGroupPage from './pages/Groups/EditGroup';
+import GroupDetailsPage from './pages/Groups/GroupDetails';
 
 
 function App() {
@@ -25,6 +29,12 @@ function App() {
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/search" element={<SearchPage />} />
 
+                    <Route path="/groups">
+                        <Route index element={<GroupsListPage />} />
+                        <Route path="create" element={<CreateGroupPage />} />
+                        <Route path="edit/:id" element={<EditGroupPage />} />
+                        <Route path="details/:id" element={<GroupDetailsPage />} />
+                    </Route>
                 </Route>
             </Routes>
         </>

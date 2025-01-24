@@ -1,23 +1,15 @@
 import { Form, Input, Button, DatePicker, notification } from 'antd';
 import { useRegisterUserMutation } from '../services/apiUser';
-import { Dayjs } from 'dayjs'; 
 import { RegisterField } from '../models/accounts';
+import { IRegisterFormValues } from '../models/types';
 
 const { Item } = Form;
 
-interface RegisterFormValues {
-  username: string;
-  email: string;
-  password: string;
-  phoneNumber?: string;
-  birthDate: Dayjs; 
-}
-
 const Register = () => {
   const [registerUser] = useRegisterUserMutation();
-  const [form] = Form.useForm<RegisterFormValues>();
+  const [form] = Form.useForm<IRegisterFormValues>();
 
-  const onFinish = async (values: RegisterFormValues) => {
+  const onFinish = async (values: IRegisterFormValues) => {
     try {
       
       const formattedValues: RegisterField = {
@@ -45,7 +37,7 @@ const Register = () => {
 
   return (
     <div style={{ maxWidth: '400px', margin: '0 auto' }}>
-      <h2 className='text-center'>Register</h2>
+      <h2>Реєстрація</h2>
       <Form
         form={form}
         name="register"

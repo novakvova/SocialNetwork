@@ -1,3 +1,4 @@
+
 export type RegisterField = {
     username: string;
     email: string;
@@ -5,6 +6,8 @@ export type RegisterField = {
     phoneNumber?: string;
     birthDate?: string;
   };
+
+
   
 export type LoginField = {
     email: string;

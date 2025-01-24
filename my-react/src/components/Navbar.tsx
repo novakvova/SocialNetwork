@@ -54,6 +54,14 @@ const Navbar: React.FC = () => {
                         <span>Contacts</span>
                     </Link>
                     <Link
+                        to="/groups"
+                        className={`flex items-center space-x-2 ${current === '/contacts' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
+                        onClick={() => handleMenuClick('/contacts')}
+                    >
+                        <UserGroupIcon className="h-5 w-5" />
+                        <span>Groups</span>
+                    </Link>
+                    <Link
                         to="/settings"
                         className={`flex items-center space-x-2 ${current === '/settings' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
                         onClick={() => handleMenuClick('/settings')}
