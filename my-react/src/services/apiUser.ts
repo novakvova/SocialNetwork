@@ -1,8 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Contact} from '../types';
 import {APP_ENV} from "../env";
 import { RegisterField } from '../models/accounts';
-
+import { Contact } from '../models/types';
 export const api = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({ baseUrl: APP_ENV.REMOTE_BASE_URL }),

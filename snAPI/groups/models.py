@@ -25,3 +25,6 @@ class GroupMembership(models.Model):
 
     class Meta:
         unique_together = ('user', 'group')
+
+
+

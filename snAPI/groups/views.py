@@ -6,6 +6,7 @@ from rest_framework import status
 from .models import Group, GroupMembership
 from .serializers import GroupSerializer
 
+
 class GroupListCreateView(ListCreateAPIView):
     """
     Отримання списку груп та створення нової групи.
@@ -91,3 +92,25 @@ class GroupMembersView(APIView):
         
         except Group.DoesNotExist:
             return Response({"error": "Групу не знайдено"}, status=status.HTTP_404_NOT_FOUND)
+
+
+#posts
+class PostListCreateView(APIView):
+    def get(self, request):
+        
+        groups = request.query_params.get('groups')
+        if groups:
+            groups_list = groups.split(',')
+            posts = Post.objects.filter(group__in=groups_list).order_by('-timestamp')
+        else:
+            posts = Post.objects.all().order_by('-timestamp')
+
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = PostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

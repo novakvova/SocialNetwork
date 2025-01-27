@@ -1,78 +1,61 @@
-import React, { useEffect, useState } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { HeartIcon, ChatBubbleOvalLeftIcon, ShareIcon, EyeIcon } from '@heroicons/react/24/solid';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-interface NewsItem {
-  id: number;
-  title: string;
-  content: string;
+interface Post {
+    id: number;
+    title: string;
+    content: string;
+    author: string;
+    group: string;
+    timestamp: string;
 }
 
-const mockFetchNews = (page: number, limit: number): Promise<NewsItem[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const newNews = Array.from({ length: limit }, (_, i) => {
-        const id = page * limit + i + 1;
-        return {
-          id,
-          title: `News Item ${id}`,
-          content: `This is the content of news item ${id}.`,
-        };
-      });
-      resolve(newNews);
-    }, 1000); 
-  });
-};
-
 const NewsFeed: React.FC = () => {
-  const [news, setNews] = useState<NewsItem[]>([]);
-  const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string>("");
 
-  const fetchMoreNews = async () => {
-    try {
-      const newNews = await mockFetchNews(page, 10);
-      if (newNews.length > 0) {
-        setNews((prevNews) => [...prevNews, ...newNews]);
-        setPage((prevPage) => prevPage + 1);
-      } else {
-        setHasMore(false);
-      }
-    } catch (error) {
-      console.error('Error fetching news:', error);
-    }
-  };
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:9178/api/posts/");
+                setPosts(response.data);
+            } catch (err) {
+                setError("Cant download posts");
+            } finally {
+                setLoading(false);
+            }
+        };
 
-  useEffect(() => {
-    fetchMoreNews();
-  }, []);
+        fetchPosts();
+    }, []);
 
-  return (
-    <div className="news-feed-container">
-      <InfiniteScroll
-        dataLength={news.length}
-        next={fetchMoreNews}
-        hasMore={hasMore}
-        loader={<h4>Loading...</h4>}
-        endMessage={<p>No more news to display.</p>}
-      >
-        <div className="news-container">
-          {news.map((item) => (
-            <div key={item.id} className="news-item">
-              <h2>{item.title}</h2>
-              <p>{item.content}</p>
-              <div className="news-item-actions">
-                <button><HeartIcon /> count</button>
-                <button><ChatBubbleOvalLeftIcon /> count</button>
-                <button><ShareIcon /> count</button>
-                <button><EyeIcon /> count</button>
-              </div>
-            </div>
-          ))}
+    return (
+        <div className="p-4">
+            <h1 className="text-3xl font-bold text-gray-800 mb-6">News Feed</h1>
+            {loading ? (
+                <p className="text-gray-600">Downl;oading</p>
+            ) : error ? (
+                <p className="text-red-500">{error}</p>
+            ) : posts.length === 0 ? (
+                <p>Np posts</p>
+            ) : (
+                <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {posts.map((post) => (
+                        <li key={post.id} className="bg-white p-6 rounded-lg shadow-lg">
+                            <h2 className="text-xl font-semibold text-gray-800">{post.title}</h2>
+                            <p className="text-gray-600 mt-2">{post.content}</p>
+                            <div className="mt-4 text-gray-500 text-sm">
+                                <span>Автор: {post.author}</span> |{" "}
+                                <span>Група: {post.group}</span> |{" "}
+                                <span>{new Date(post.timestamp).toLocaleString()}</span>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
-      </InfiniteScroll>
-    </div>
-  );
+    );
 };
 
 export default NewsFeed;

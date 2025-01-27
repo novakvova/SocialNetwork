@@ -9,7 +9,7 @@ export const apiGroup = createApi({
     baseQuery: fetchBaseQuery({ 
         baseUrl: `${APP_ENV.REMOTE_BASE_URL}`,
         prepareHeaders: (headers) => {
-            const token = apiToken.get(); // Отримання токену з локального сховища
+            const token = apiToken.getAccessToken(); 
             if (token) {
                 headers.set('Authorization', `Bearer ${token}`);
             }
