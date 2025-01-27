@@ -6,8 +6,6 @@ export type RegisterField = {
     phoneNumber?: string;
     birthDate?: string;
   };
-
-
   
 export type LoginField = {
     email: string;
@@ -19,10 +17,13 @@ export interface TokenPayload {
     id: string;
     email: string;
     role: string;
+    exp: number;
+
 }
 
 export interface TokenPayloadItems {
     "user_id": string;
     "email": string;
     "role": string;
+    "exp": number;
 }

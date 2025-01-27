@@ -10,7 +10,7 @@ call .venv\Scripts\activate.bat
 :: Install dependencies
 echo Installing dependencies...
 cd snAPI
-pip install Django
+
 python -m pip install -U pip
 pip install -r requirements.txt
 

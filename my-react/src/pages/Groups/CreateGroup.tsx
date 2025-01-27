@@ -3,11 +3,13 @@ import TextArea from "antd/es/input/TextArea";
 import { useNavigate } from "react-router-dom";
 import { IGroupPostRequest } from '../../models/types';
 import { useCreateGroupMutation } from '../../services/apiGroup';
+import { useCreateChatMutation } from '../../services/apiChat';  // Імпортуємо мутацію для чату
 
 const { Item } = Form;
 
 const CreateGroupPage = () => {
     const [createGroup] = useCreateGroupMutation();
+    const [createChat] = useCreateChatMutation();  // Ініціалізуємо мутацію для чату
     const [form] = Form.useForm<IGroupPostRequest>();
     const navigation = useNavigate();
 
@@ -17,10 +19,14 @@ const CreateGroupPage = () => {
             const response = await createGroup(values).unwrap();
             console.log("Response:", response);
 
+            // Створення чату з отриманими даними
+            const chatData = { name: response.name, group: response.id };  // Використовуємо ID групи для чату
+            await createChat(chatData).unwrap();  // Викликаємо мутацію для створення чату
+
             // Показуємо повідомлення про успіх
             notification.success({
                 message: 'Успішна реєстрація',
-                description: 'Ви успішно зареєстровані!',
+                description: 'Ви успішно зареєстровані і створено чат!',
             });
 
             // Перенаправляємо користувача на попередню сторінку
@@ -29,11 +35,11 @@ const CreateGroupPage = () => {
             // Очистити поля форми
             form.resetFields();
         } catch (err) {
-            console.error("Помилка створення групи:", err);
+            console.error("Помилка створення групи або чату:", err);
 
             // Показуємо повідомлення про помилку
             notification.error({
-                message: 'Помилка створення групи',
+                message: 'Помилка',
                 description: 'Щось пішло не так, спробуйте ще раз.',
             });
         }
@@ -52,11 +58,7 @@ const CreateGroupPage = () => {
                 <Item
                     name="name"
                     label="Назва групи"
-                    rules={[
-                        { required: true, message: 'Будь ласка, введіть назву групи!' },
-                        { min: 1, max: 150, message: 'Назва має бути від 1 до 150 символів' },
-                    ]}
-                >
+                    rules={[{ required: true, message: 'Будь ласка, введіть назву групи!' }]}>
                     <Input placeholder="Назва" />
                 </Item>
                 <Item

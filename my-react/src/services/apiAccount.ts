@@ -1,13 +1,13 @@
 import { apiToken } from "./apiToken";
 
 export const apiAccount = {
-    login(accessToken: string) {
-        apiToken.save(accessToken);
+    login(accessToken: string, refreshToken: string) {
+        apiToken.saveTokens(accessToken, refreshToken);
     },
     logout() {
-        apiToken.clear();
+        apiToken.clearTokens();
     },
     isAuthenticated(): boolean {
-        return apiToken.get() !== null;
+        return apiToken.getAccessToken() !== null;
     }
 }

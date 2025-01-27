@@ -56,6 +56,8 @@ pip install Pillow
 pip install djangorestframework
 pip install djangorestframework djangorestframework-simplejwt
 pip install django-cors-headers
-
+pip install channels
+pip freeze > requirements.txt         - копіює всі залежності (пакети) у файл requirements.txt якщо він використовується
+docker build -t komar-django .
 --------------------------
 start-project.bat

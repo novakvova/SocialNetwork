@@ -3,8 +3,8 @@ import {
     HomeIcon, 
     UserGroupIcon, 
     AdjustmentsHorizontalIcon, 
-    ArrowLeftOnRectangleIcon,
-    ArrowRightOnRectangleIcon,
+    ArrowLeftEndOnRectangleIcon,
+    ArrowRightStartOnRectangleIcon,
     IdentificationIcon 
 } from '@heroicons/react/24/solid';
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
@@ -12,15 +12,17 @@ import { selectAccount, selectIsAuth, clear } from "../redux/account/accountSlic
 import { Link, useLocation } from "react-router-dom";
 import { message } from "antd";
 import { apiAccount } from "../services/apiAccount";
+import { useGetUserQuery } from "../services/apiUser";
 
 const Navbar: React.FC = () => {
     const account = useAppSelector(selectAccount);
     const isAuth = useAppSelector(selectIsAuth);
     const dispatch = useAppDispatch();
     const location = useLocation();
-
     const [current, setCurrent] = useState<string>(location.pathname);
-
+    const userid = Number(account?.id);
+    const { data } = useGetUserQuery(userid);
+    
     const handleLogout = () => {
         apiAccount.logout();
         dispatch(clear());
@@ -74,13 +76,13 @@ const Navbar: React.FC = () => {
                 <div className="flex items-center space-x-4">
                     {isAuth ? (
                         <>
-                            <span className="text-gray-600">Hello, {account?.email}</span>
+                            <span className="text-gray-600">Hello, {data?.username}</span>
                             <button 
                                 type="button" 
                                 onClick={handleLogout}
                                 className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
                             >
-                                <ArrowLeftOnRectangleIcon className="h-5 w-5" />
+                                <ArrowRightStartOnRectangleIcon className="h-5 w-5" />
                                 <span>Logout</span>
                             </button>
                         </>
@@ -91,7 +93,7 @@ const Navbar: React.FC = () => {
                                 className={`flex items-center space-x-2 ${current === '/login' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
                                 onClick={() => handleMenuClick('/login')}
                             >
-                                <ArrowRightOnRectangleIcon className="h-5 w-5" />
+                                <ArrowLeftEndOnRectangleIcon className="h-5 w-5" />
                                 <span>Login</span>
                             </Link>
                             <Link 
