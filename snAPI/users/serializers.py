@@ -44,7 +44,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         UserProfile.objects.create(user=user, **profile_data)
         return user
 
-
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
