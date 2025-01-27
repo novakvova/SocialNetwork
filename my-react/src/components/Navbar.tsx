@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { 
     HomeIcon, 
     UserGroupIcon, 
-    AdjustmentsHorizontalIcon, 
-    ArrowLeftEndOnRectangleIcon,
+    AdjustmentsHorizontalIcon,
+    MagnifyingGlassIcon,
     ArrowRightStartOnRectangleIcon,
-    IdentificationIcon 
+    ArrowLeftEndOnRectangleIcon,
+    IdentificationIcon,
+
 } from '@heroicons/react/24/solid';
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import { selectAccount, selectIsAuth, clear } from "../redux/account/accountSlice";
@@ -70,13 +72,27 @@ const Navbar: React.FC = () => {
                         <AdjustmentsHorizontalIcon className="h-5 w-5" />
                         <span>Settings</span>
                     </Link>
+                    <Link
+                        to="/search"
+                        className={`flex items-center space-x-2 ${current === '/search' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
+                        onClick={() => handleMenuClick('/search')}
+                    >
+                        <MagnifyingGlassIcon className="h-5 w-5" />
+                        <span>Search</span>
+                    </Link>
                 </nav>
 
                 {/* Аутентифікація */}
                 <div className="flex items-center space-x-4">
                     {isAuth ? (
                         <>
-                            <span className="text-gray-600">Hello, {data?.username}</span>
+                            <Link 
+                                to="/profile"
+                                className={`flex items-center space-x-2 ${current === '/profile' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
+                                onClick={() => handleMenuClick('/profile')}
+                            >
+                                <span className="text-gray-600">Hello, {data?.username}</span>
+                            </Link>
                             <button 
                                 type="button" 
                                 onClick={handleLogout}

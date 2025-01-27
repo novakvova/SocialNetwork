@@ -18,7 +18,6 @@ export interface TokenPayload {
     email: string;
     role: string;
     exp: number;
-
 }
 
 export interface TokenPayloadItems {
