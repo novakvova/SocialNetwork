@@ -10,9 +10,12 @@ export const api = createApi({
         getContacts: builder.query<Contact[], void>({
             query: () => 'users',
         }),
-        getUserInfo: builder.query<any[], string>({
-          query: () => 'user',
-      }),
+        getUserInfo: builder.query<{ id: string; username: string; email: string }, void>({
+          query: (userId) => ({
+            url: `users/${userId}`,
+            method: "GET",
+          }),
+        }),      
         registerUser: builder.mutation({
             query: (data: RegisterField) => ({
               url: "register/", 
@@ -35,14 +38,8 @@ export const api = createApi({
                 body: data,
             }),
         }),
-        search: builder.query<any[], string>({
-          query: (query) => `search?query=${encodeURIComponent(query)}`,
-        }),
-        getRecommendations: builder.query<string[], void>({
-          query: () => 'recommendations',
-        }),
     }),
     
 });
 
-export const { useGetContactsQuery, useRegisterUserMutation, useLoginUserMutation, useLazySearchQuery, useGetRecommendationsQuery } = api;
+export const { useGetContactsQuery, useGetUserInfoQuery, useRegisterUserMutation, useLoginUserMutation } = api;
