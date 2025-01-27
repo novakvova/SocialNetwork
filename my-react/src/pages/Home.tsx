@@ -1,4 +1,5 @@
 import React from "react";
+import NewsFeed from "../components/NewsFeed";
 
 const Home: React.FC = () => {
     return (
@@ -7,7 +8,9 @@ const Home: React.FC = () => {
             <p className="mt-4 text-gray-600">
                 Вітаємо на нашій головній сторінці! Дізнайтеся більше про нас.
             </p>
+            <NewsFeed />
         </div>
+        
     );
 };
 
