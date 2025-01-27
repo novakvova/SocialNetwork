@@ -9,13 +9,10 @@ export const api = createApi({
     endpoints: (builder) => ({
         getContacts: builder.query<Contact[], void>({
             query: () => 'users',
-        }),
-        getUserInfo: builder.query<{ id: string; username: string; email: string }, void>({
-          query: (userId) => ({
-            url: `users/${userId}`,
-            method: "GET",
-          }),
         }),      
+        getUser: builder.query<Contact, number>({
+            query: (id) => `users/${id}/`,
+        }),
         registerUser: builder.mutation({
             query: (data: RegisterField) => ({
               url: "register/", 
@@ -42,4 +39,4 @@ export const api = createApi({
     
 });
 
-export const { useGetContactsQuery, useGetUserInfoQuery, useRegisterUserMutation, useLoginUserMutation } = api;
+export const { useGetContactsQuery, useRegisterUserMutation, useLoginUserMutation, useGetUserQuery } = api;

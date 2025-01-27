@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useGetUserInfoQuery } from "../services/apiUser";
+import { useGetUserQuery } from "../services/apiUser";
 import { useAppSelector } from "../redux/hooks";
 import { selectAccount } from "../redux/account/accountSlice";
 
@@ -8,7 +8,9 @@ const Profile: React.FC = () => {
     const currentUser = useAppSelector(selectAccount);
     const navigate = useNavigate();
 
-    const { data, error, isLoading } = useGetUserInfoQuery(currentUser.id);
+    const userId = Number(currentUser?.id);
+
+    const { data, error, isLoading } = useGetUserQuery(userId);
 
     if (isLoading) return <p>Завантаження...</p>;
     if (error) return <p>Сталася помилка при завантаженні даних користувача</p>;
