@@ -4,7 +4,6 @@ from groups.models import Group
 
 User = get_user_model()
 
-
 class Chat(models.Model):
     is_group = models.BooleanField(default=False)
     participants = models.ManyToManyField(User, related_name="chats")
@@ -13,7 +12,6 @@ class Chat(models.Model):
 
     def __str__(self):
         return f"Group Chat - {self.group.name}" if self.is_group else f"Private Chat - {self.id}"
-
 
 class Message(models.Model):
     chat = models.ForeignKey(Chat, related_name="messages", on_delete=models.CASCADE)

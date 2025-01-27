@@ -67,7 +67,7 @@ const GroupDetailsPage: React.FC = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={2} className="px-6 py-4 text-center">
+                  <td colSpan={Number(id)} className="px-6 py-4 text-center">
                     У групі ще немає учасників.
                   </td>
                 </tr>
@@ -83,8 +83,7 @@ const GroupDetailsPage: React.FC = () => {
           Чат групи
         </h2>
         <div className="bg-gray-50 border rounded-lg p-4 h-full">
-          {/* Компонент чату, який відображатиме повідомлення */}
-          {group?.id ? <ChatBox groupId={2} /> : <p>Чат наразі не доступний.</p>}
+          <ChatBox groupId={Number(id)} />
         </div>
       </div>
     </div>

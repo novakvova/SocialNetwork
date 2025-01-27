@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useGetMessagesQuery, useCreateMessageMutation } from '../../services/apiChat';
-import { Input, Button, List, Avatar, Spin, notification } from 'antd';
+import { useGetChatByGroupIdQuery, useCreateMessageMutation } from '../../services/apiChat';
+import { Input, Button, Spin, notification } from 'antd';
 import { SendOutlined } from '@ant-design/icons';
-import { Message } from '../../models/types';
 import { selectAccount } from '../../redux/account/accountSlice';
+import ChatMessages from './ChatMessages'; 
 
-interface ChatBoxProps {
-  groupId: number;
-}
-
-const ChatBox: React.FC<ChatBoxProps> = ({ groupId }) => {
+const ChatBox = ({ groupId }: { groupId: number }) => {
   const [messageContent, setMessageContent] = useState('');
-  const { data: messages, isLoading, error } = useGetMessagesQuery({ chatId: groupId });
+  const { data, isLoading: isChatLoading, error: chatError } = useGetChatByGroupIdQuery(groupId);
   const [createMessage, { isLoading: isSending }] = useCreateMessageMutation();
-
-  // Отримуємо актуального користувача з Redux-стану
+  console.log("Group Id :", groupId);
+  console.log("Chat Id :", data?.id);
+    // Отримуємо актуального користувача з Redux-стану
   const currentUser = useSelector(selectAccount);
+
+  
+
 
   const handleSendMessage = async () => {
     if (messageContent.trim()) {
@@ -27,10 +27,9 @@ const ChatBox: React.FC<ChatBoxProps> = ({ groupId }) => {
 
       try {
         await createMessage({
-          chat: groupId,
+          chat: data?.id,
           sender: currentUser.id, 
           content: messageContent,
-          timestamp: new Date().toISOString(),
           is_read: false,
         });
         setMessageContent('');
@@ -40,27 +39,40 @@ const ChatBox: React.FC<ChatBoxProps> = ({ groupId }) => {
     }
   };
 
-  if (isLoading) return <Spin size="large" />;
+  if (isChatLoading) return <Spin size="large" />;
+  if (data?.id === undefined) {
+    return (
+    <>
+    <div>Розпочніть спілкування.</div>
+     <div className="message-input" style={{ padding: '10px', display: 'flex', alignItems: 'center' }}>
+        <Input
+          value={messageContent}
+          onChange={(e) => setMessageContent(e.target.value)}
+          onPressEnter={handleSendMessage}
+          placeholder="Type a message..."
+          style={{ flex: 1, marginRight: '10px' }}
+        />
+        <Button
+          icon={<SendOutlined />}
+          onClick={handleSendMessage}
+          loading={isSending}
+          disabled={!messageContent.trim()}
+        />
+      </div>
+    </>
+
+  )
+
+  }
 
   return (
     <div className="chat-box">
+      {/* Вставляємо компонент ChatMessages */}
       <div className="messages-list" style={{ padding: '20px', height: '400px', overflowY: 'auto' }}>
-        {error ? (
+        {chatError ? (
           <div>Failed to load messages</div>
         ) : (
-          <List
-            dataSource={messages}
-            renderItem={(message: Message) => (
-              <List.Item>
-                <List.Item.Meta
-                  avatar={<Avatar>{message.sender.charAt(0)}</Avatar>}
-                  title={message.sender}
-                  description={message.content}
-                />
-                <div>{new Date(message.timestamp).toLocaleTimeString()}</div>
-              </List.Item>
-            )}
-          />
+          <ChatMessages chatId={Number(data?.id)} />
         )}
       </div>
 

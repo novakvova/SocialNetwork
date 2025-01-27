@@ -31,11 +31,11 @@ export interface Contact {
     email: string;
 }
 
-export interface Chat {
+export interface IChatItem {
     id: number;
     is_group: boolean; 
     participants:[];
-    group: number,
+    group: number;
     messages: [
       {
         id: number,
@@ -47,19 +47,25 @@ export interface Chat {
       }
     ],
   }
-  export interface CreateChat {
+  export interface IChatPostRequest {
     id: number;
     is_group: boolean; 
     participants:[];
     group: number;
   }
   
-  export interface Message {
+  export interface IMessageItem {
     id: number;
     chat: number;
     sender: string;
     content: string;
     timestamp: string; 
+    is_read: boolean
+  }
+  export interface IMessagePostRequest{
+    chat: number;
+    sender: string;
+    content: string;
     is_read: boolean
   }
   

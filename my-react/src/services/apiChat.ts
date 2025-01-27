@@ -1,25 +1,48 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { APP_ENV } from '../env';
-import { Chat, Message } from '../models/types';
+import { APP_ENV } from "../env";
+import { IChatItem, IChatPostRequest, IMessageItem, IMessagePostRequest } from '../models/types';
+import { apiToken } from './apiToken';
 
-// Типи для Chat та Message
-
-// RTK Query API
+// API для роботи з чатами та повідомленнями
 export const apiChat = createApi({
-  reducerPath: 'apiChat',
+  reducerPath: 'chat',
   baseQuery: fetchBaseQuery({
-    baseUrl: APP_ENV.REMOTE_BASE_URL,
+    baseUrl: `${APP_ENV.REMOTE_BASE_URL}`,
+    prepareHeaders: (headers) => {
+      // Додаємо авторизаційний токен до запитів
+      const token = apiToken.getAccessToken();
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
+      return headers;
+    },
   }),
-  tagTypes: ['Chat', 'Message'],
+  tagTypes: ["Chat", "Message"],
   endpoints: (builder) => ({
     // Отримати всі чати
-    getChats: builder.query<Chat[], void>({
-      query: () => 'chats/',
-      providesTags: ['Chat'],
+    getChats: builder.query<IChatItem[], void>({
+      query: () => 'chats',
+      providesTags: ["Chat"],
     }),
 
+    // Отримати конкретний чат
+    getChat: builder.query<IChatItem, number>({
+      query: (id) => `chats/${id}/`,
+      providesTags: (_, __, id) => [{ type: 'Chat', id }],
+    }),
+
+    // Отримати конкретний чат за groupId
+    getChatByGroupId: builder.query<IChatItem, number>({
+      query: (groupId) => ({
+        url: '/chats/',
+        params: {groupId },
+      }),
+      providesTags: (_, __, groupId) => [{ type: 'Chat', id: groupId }],
+    }),
+
+
     // Створити новий чат
-    createChat: builder.mutation<Chat, Partial<Chat>>({
+    createChat: builder.mutation<IChatItem, Partial<IChatItem>>({
       query: (newChat) => ({
         url: '/chats/',
         method: 'POST',
@@ -28,40 +51,64 @@ export const apiChat = createApi({
       invalidatesTags: ['Chat'],
     }),
 
-    // Отримати всі повідомлення
-    getMessages: builder.query<Message[], { chatId?: number }>({
-      query: ({ chatId }) => ({
+    // Оновити чат
+    updateChat: builder.mutation<IChatItem, { id: number; data: IChatPostRequest }>({
+      query: ({ id, data }) => ({
+        url: `chats/${id}/`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: (_, __, { id }) => [{ type: 'Chat', id }],
+    }),
+
+    // Видалити чат
+    deleteChat: builder.mutation<{ success: boolean }, number>({
+      query: (id) => ({
+        url: `chats/${id}/`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ["Chat"],
+    }),
+
+    // Отримати повідомлення з чату
+    getMessages: builder.query<IMessageItem[], number>({
+      query: (chatId) => ({
         url: '/messages/',
         params: chatId ? { chat_id: chatId } : undefined,
-      }),
-      providesTags: ['Message'],
+      }),providesTags: (_, __, chatId) => [{ type: 'Message', id: chatId }],
     }),
 
     // Створити нове повідомлення
-    createMessage: builder.mutation<Message, Partial<Message>>({
+    createMessage: builder.mutation<IMessagePostRequest, Partial<IMessagePostRequest>>({
       query: (newMessage) => ({
-        url: '/messages/',
+        url: `/messages/`,
         method: 'POST',
-        body: newMessage,
+        body: {
+          ...newMessage,
+        },
       }),
-      invalidatesTags: ['Message'],
+      invalidatesTags: (_, __, { chat }) => [{ type: 'Message', id: chat }],
     }),
 
     // Видалити повідомлення
-    deleteMessage: builder.mutation<void, number>({
-      query: (messageId) => ({
-        url: `/messages/${messageId}/`,
+    deleteMessage: builder.mutation<{ success: boolean }, { chatId: number; messageId: number }>({
+      query: ({ chatId, messageId }) => ({
+        url: `chats/${chatId}/messages/${messageId}/`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Message'],
+      invalidatesTags: (_, __, { chatId }) => [{ type: 'Message', id: chatId }],
     }),
   }),
 });
 
-// Хуки для використання API
+// Експортуємо хуки для використання в компонентах
 export const {
   useGetChatsQuery,
+  useGetChatQuery,
+  useGetChatByGroupIdQuery,
   useCreateChatMutation,
+  useUpdateChatMutation,
+  useDeleteChatMutation,
   useGetMessagesQuery,
   useCreateMessageMutation,
   useDeleteMessageMutation,

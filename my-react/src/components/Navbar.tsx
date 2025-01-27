@@ -70,14 +70,6 @@ const Navbar: React.FC = () => {
                         <AdjustmentsHorizontalIcon className="h-5 w-5" />
                         <span>Settings</span>
                     </Link>
-                    <Link
-                        to="/chats"
-                        className={`flex items-center space-x-2 ${current === '/chats' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
-                        onClick={() => handleMenuClick('/chats')}
-                    >
-                        <AdjustmentsHorizontalIcon className="h-5 w-5" />
-                        <span>Chats</span>
-                    </Link>
                 </nav>
 
                 {/* Аутентифікація */}
