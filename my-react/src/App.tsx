@@ -10,6 +10,7 @@ import GroupsListPage from './pages/Groups/GroupsList';
 import CreateGroupPage from './pages/Groups/CreateGroup';
 import EditGroupPage from './pages/Groups/EditGroup';
 import GroupDetailsPage from './pages/Groups/GroupDetails';
+import ChatsList from './pages/Chat';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/contacts" element={<Contacts />} />
                     <Route path="/settings" element={<Settings />} />
+                    <Route path="/chats" element={<ChatsList />} />
                     <Route path="/login" element={<LoginForm />} />
                     <Route path="/register" element={<RegisterForm />} />
                     <Route path="/groups">

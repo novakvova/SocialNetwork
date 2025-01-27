@@ -51,6 +51,7 @@ urlpatterns = [
     # User app endpoints
     path('api/', include('users.urls')),
     path('api/groups/', include('groups.urls')), 
+    path('api/', include('chats.urls')), 
 ]
 
 if settings.DEBUG:

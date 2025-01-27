@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom'; // для отримання ID з URL
 import { useGetGroupMembersQuery, useGetGroupQuery } from '../../services/apiGroup';
 import { Spin, Alert } from 'antd';
+import ChatBox from '../Chat/ChatBox';
 
 const GroupDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -82,8 +83,8 @@ const GroupDetailsPage: React.FC = () => {
           Чат групи
         </h2>
         <div className="bg-gray-50 border rounded-lg p-4 h-full">
-          {/* Тут буде компонент чату */}
-          <p>Чат наразі не реалізовано.</p>
+          {/* Компонент чату, який відображатиме повідомлення */}
+          {group?.id ? <ChatBox groupId={2} /> : <p>Чат наразі не доступний.</p>}
         </div>
       </div>
     </div>
