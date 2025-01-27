@@ -23,7 +23,7 @@ const LoginForm = () => {
               const payload = apiToken.getPayload();
                 if (payload) dispatch(setAccount(payload));
           } else {
-              message.error("Невірний логін або пароль");
+              message.error("Невірний логін абjо пароль");
           }
       } catch (error: unknown) {
           if (error instanceof Error) {
