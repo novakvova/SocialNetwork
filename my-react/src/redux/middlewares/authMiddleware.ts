@@ -28,6 +28,6 @@ const checkTokenExpiration = (token: string): boolean => {
     const now = Math.floor(Date.now() / 1000);
     return payload.exp < now;
   } catch {
-    return true; // Вважати токен протермінованим у разі помилки
+    return true; 
   }
 };

@@ -13,11 +13,7 @@ class ChatViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['group']
 
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     return queryset.filter(participants=self.request.user)
-
-
+    
     
 class MessageViewSet(ModelViewSet):
     queryset = Message.objects.all()
