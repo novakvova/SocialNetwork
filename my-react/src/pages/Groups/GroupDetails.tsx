@@ -83,7 +83,7 @@ const GroupDetailsPage: React.FC = () => {
           Чат групи
         </h2>
         <div className="bg-gray-50 border rounded-lg p-4 h-full">
-          <ChatBox groupId={Number(id)} />
+          <ChatBox group={Number(id)} />
         </div>
       </div>
     </div>

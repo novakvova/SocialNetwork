@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { APP_ENV } from "../env";
-import { IChatItem, IChatPostRequest, IMessageItem, IMessagePostRequest } from '../models/types';
+import { IChatItem, IChatPostRequest, IMessageItem, IMessagePostRequest, IMessagePutRequest } from '../models/types';
 import { apiToken } from './apiToken';
 
 // API для роботи з чатами та повідомленнями
@@ -32,17 +32,16 @@ export const apiChat = createApi({
     }),
 
     // Отримати конкретний чат за groupId
-    getChatByGroupId: builder.query<IChatItem, number>({
-      query: (groupId) => ({
-        url: '/chats/',
-        params: {groupId },
+    getChatByGroupId: builder.query<IChatItem[], number>({
+      query: (group) => ({
+        url: `/chats/?group=${group}`
       }),
-      providesTags: (_, __, groupId) => [{ type: 'Chat', id: groupId }],
+      providesTags: (_, __, group) => [{ type: 'Chat', id: group }],
     }),
-
+    
 
     // Створити новий чат
-    createChat: builder.mutation<IChatItem, Partial<IChatItem>>({
+    createChat: builder.mutation<IChatPostRequest, Partial<IChatPostRequest>>({
       query: (newChat) => ({
         url: '/chats/',
         method: 'POST',
@@ -52,7 +51,7 @@ export const apiChat = createApi({
     }),
 
     // Оновити чат
-    updateChat: builder.mutation<IChatItem, { id: number; data: IChatPostRequest }>({
+    updateChat: builder.mutation<IChatPostRequest, { id: number; data: IChatPostRequest }>({
       query: ({ id, data }) => ({
         url: `chats/${id}/`,
         method: 'PUT',
@@ -90,13 +89,23 @@ export const apiChat = createApi({
       invalidatesTags: (_, __, { chat }) => [{ type: 'Message', id: chat }],
     }),
 
+    // Додайте цей метод до apiChat
+    updateMessage: builder.mutation<IMessageItem, IMessagePutRequest>({
+      query: ({ id, ...content }) => ({
+        url: `/messages/${id}/`,
+        method: 'PUT',
+        body: { ...content },
+      }),
+      invalidatesTags: (_, __, { id }) => [{ type: 'Message', id }],
+    }),
+
     // Видалити повідомлення
-    deleteMessage: builder.mutation<{ success: boolean }, { chatId: number; messageId: number }>({
-      query: ({ chatId, messageId }) => ({
-        url: `chats/${chatId}/messages/${messageId}/`,
+    deleteMessage: builder.mutation<{ success: boolean }, {messageId: number }>({
+      query: ({messageId }) => ({
+        url: `/messages/${messageId}/`,
         method: 'DELETE',
       }),
-      invalidatesTags: (_, __, { chatId }) => [{ type: 'Message', id: chatId }],
+      invalidatesTags: (_, __, { messageId }) => [{ type: 'Message', id: messageId }],
     }),
   }),
 });
@@ -111,5 +120,6 @@ export const {
   useDeleteChatMutation,
   useGetMessagesQuery,
   useCreateMessageMutation,
+  useUpdateMessageMutation,
   useDeleteMessageMutation,
 } = apiChat;

@@ -5,18 +5,16 @@ import { Input, Button, Spin, notification } from 'antd';
 import { SendOutlined } from '@ant-design/icons';
 import { selectAccount } from '../../redux/account/accountSlice';
 import ChatMessages from './ChatMessages'; 
+import CreateChatComponent from './CreateChat';
 
-const ChatBox = ({ groupId }: { groupId: number }) => {
+const ChatBox = ({ group }: { group: number }) => {
   const [messageContent, setMessageContent] = useState('');
-  const { data, isLoading: isChatLoading, error: chatError } = useGetChatByGroupIdQuery(groupId);
+  const { data, isLoading: isChatLoading, error: chatError } = useGetChatByGroupIdQuery(group);
   const [createMessage, { isLoading: isSending }] = useCreateMessageMutation();
-  console.log("Group Id :", groupId);
-  console.log("Chat Id :", data?.id);
+  const chatId = data?.[0]?.id; 
     // Отримуємо актуального користувача з Redux-стану
   const currentUser = useSelector(selectAccount);
-
-  
-
+  const userId = Number(currentUser?.id); 
 
   const handleSendMessage = async () => {
     if (messageContent.trim()) {
@@ -27,7 +25,7 @@ const ChatBox = ({ groupId }: { groupId: number }) => {
 
       try {
         await createMessage({
-          chat: data?.id,
+          chat: chatId,
           sender: currentUser.id, 
           content: messageContent,
           is_read: false,
@@ -40,9 +38,10 @@ const ChatBox = ({ groupId }: { groupId: number }) => {
   };
 
   if (isChatLoading) return <Spin size="large" />;
-  if (data?.id === undefined) {
+  if (chatId === undefined) {
     return (
     <>
+    <CreateChatComponent group={Number(group)} participants={[userId]} />
     <div>Розпочніть спілкування.</div>
      <div className="message-input" style={{ padding: '10px', display: 'flex', alignItems: 'center' }}>
         <Input
@@ -72,7 +71,7 @@ const ChatBox = ({ groupId }: { groupId: number }) => {
         {chatError ? (
           <div>Failed to load messages</div>
         ) : (
-          <ChatMessages chatId={Number(data?.id)} />
+          <ChatMessages chatId={Number(chatId)} />
         )}
       </div>
 

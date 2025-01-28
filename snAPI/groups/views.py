@@ -13,7 +13,7 @@ class GroupListCreateView(ListCreateAPIView):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    #permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         # Створюємо групу та додаємо автора як адміністратора
@@ -94,23 +94,3 @@ class GroupMembersView(APIView):
             return Response({"error": "Групу не знайдено"}, status=status.HTTP_404_NOT_FOUND)
 
 
-#posts
-class PostListCreateView(APIView):
-    def get(self, request):
-        
-        groups = request.query_params.get('groups')
-        if groups:
-            groups_list = groups.split(',')
-            posts = Post.objects.filter(group__in=groups_list).order_by('-timestamp')
-        else:
-            posts = Post.objects.all().order_by('-timestamp')
-
-        serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def post(self, request):
-        serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

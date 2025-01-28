@@ -45,7 +45,7 @@ const InfiniteScrollPage: React.FC = () => {
 
   useEffect(() => {
     fetchMoreNews();
-  }, []);
+  });
 
   return (
     <div className="news-feed-container">

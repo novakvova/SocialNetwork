@@ -20,7 +20,7 @@ const NewsFeed: React.FC = () => {
             try {
                 const response = await axios.get("http://127.0.0.1:9178/api/posts/");
                 setPosts(response.data);
-            } catch (err) {
+            } catch {
                 setError("Cant download posts");
             } finally {
                 setLoading(false);
