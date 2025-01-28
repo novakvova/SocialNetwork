@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import PostCard from "../components/compon/card/PostCard";
+import { Post } from "../models/posts";
+import { Col, Row } from 'antd';
 
-interface Post {
-    id: number;
-    title: string;
-    content: string;
-    author: string;
-    group: string;
-    timestamp: string;
-}
 
 const NewsFeed: React.FC = () => {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -18,43 +13,70 @@ const NewsFeed: React.FC = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:9178/api/posts/");
-                setPosts(response.data);
+                const response = await axios.get("http://127.0.0.1:9178/api/posts/posts/");
+                console.log("Fetched posts:", response.data);
+                
+                const data = Array.isArray(response.data) ? response.data : response.data.results || [];
+                setPosts(data);
             } catch (err) {
+                console.error("Error fetching posts:", err);
                 setError("Cant download posts");
             } finally {
                 setLoading(false);
             }
         };
-
         fetchPosts();
     }, []);
 
+    const handleLike = (postId: number) => {
+        axios.post(`http://127.0.0.1:9178/api/posts/${postId}/like/`).then(() => {
+            setPosts((prevPosts) =>
+                prevPosts.map((post) =>
+                    post.id === postId ? { ...post, likes_count: post.likes_count + 1 } : post
+                )
+            );
+        });
+    };
+
+    const handleComment = (postId: number, comment: string) => {
+        axios.post(`http://127.0.0.1:9178/api/posts/${postId}/comments/`, { content: comment }).then(() => {
+            setPosts((prevPosts) =>
+                prevPosts.map((post) =>
+                    post.id === postId ? { ...post, comments_count: post.comments_count + 1 } : post
+                )
+            );
+        });
+    };
+
     return (
+        <Row>
+        <Col span={8}></Col>
+        <Col span={8}>
         <div className="p-4">
             <h1 className="text-3xl font-bold text-gray-800 mb-6">News Feed</h1>
             {loading ? (
-                <p className="text-gray-600">Downl;oading</p>
+                <p className="text-gray-600">Downloading...</p>
             ) : error ? (
                 <p className="text-red-500">{error}</p>
             ) : posts.length === 0 ? (
-                <p>Np posts</p>
+                <p>No posts</p>
             ) : (
-                <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {posts.map((post) => (
-                        <li key={post.id} className="bg-white p-6 rounded-lg shadow-lg">
-                            <h2 className="text-xl font-semibold text-gray-800">{post.title}</h2>
-                            <p className="text-gray-600 mt-2">{post.content}</p>
-                            <div className="mt-4 text-gray-500 text-sm">
-                                <span>Автор: {post.author}</span> |{" "}
-                                <span>Група: {post.group}</span> |{" "}
-                                <span>{new Date(post.timestamp).toLocaleString()}</span>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+                <div className="container mx-auto">
+                    
+                        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-1">
+                            {posts.map((post) => (
+                                
+                                <PostCard key={post.id} post={post} onLike={handleLike} onComment={handleComment} />
+                                
+                            ))}
+                        </div>
+                        
+                </div>
             )}
         </div>
+        </Col>
+        <Col span={8}></Col>
+        </Row>
     );
 };
 
