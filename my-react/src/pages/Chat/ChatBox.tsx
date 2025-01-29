@@ -3,22 +3,20 @@ import { useSelector } from 'react-redux';
 import { useGetChatByGroupIdQuery, useCreateMessageMutation } from '../../services/apiChat';
 import { Input, Button, Spin, notification } from 'antd';
 import { SendOutlined } from '@ant-design/icons';
-import { selectAccount } from '../../redux/account/accountSlice';
+import { RootState } from "../../redux/store";
 import ChatMessages from './ChatMessages'; 
 import CreateChatComponent from './CreateChat';
 
 const ChatBox = ({ group }: { group: number }) => {
   const [messageContent, setMessageContent] = useState('');
-  const { data, isLoading: isChatLoading, error: chatError } = useGetChatByGroupIdQuery(group);
+  const { data, isLoading: isChatLoading, error: chatError, refetch: refetchGroupId} = useGetChatByGroupIdQuery(group);
   const [createMessage, { isLoading: isSending }] = useCreateMessageMutation();
   const chatId = data?.[0]?.id; 
-    // Отримуємо актуального користувача з Redux-стану
-  const currentUser = useSelector(selectAccount);
-  const userId = Number(currentUser?.id); 
+  const userId = useSelector((state: RootState) => state.account.account?.id);
 
   const handleSendMessage = async () => {
     if (messageContent.trim()) {
-      if (!currentUser) {
+      if (!userId) {
         notification.error({ message: 'User not authenticated', description: 'Please log in to send messages.' });
         return;
       }
@@ -26,7 +24,7 @@ const ChatBox = ({ group }: { group: number }) => {
       try {
         await createMessage({
           chat: chatId,
-          sender: currentUser.id, 
+          sender: userId, 
           content: messageContent,
           is_read: false,
         });
@@ -39,29 +37,7 @@ const ChatBox = ({ group }: { group: number }) => {
 
   if (isChatLoading) return <Spin size="large" />;
   if (chatId === undefined) {
-    return (
-    <>
-    <CreateChatComponent group={Number(group)} participants={[userId]} />
-    <div>Розпочніть спілкування.</div>
-     <div className="message-input" style={{ padding: '10px', display: 'flex', alignItems: 'center' }}>
-        <Input
-          value={messageContent}
-          onChange={(e) => setMessageContent(e.target.value)}
-          onPressEnter={handleSendMessage}
-          placeholder="Type a message..."
-          style={{ flex: 1, marginRight: '10px' }}
-        />
-        <Button
-          icon={<SendOutlined />}
-          onClick={handleSendMessage}
-          loading={isSending}
-          disabled={!messageContent.trim()}
-        />
-      </div>
-    </>
-
-  )
-
+    return (<CreateChatComponent group={Number(group)} participants={[Number(userId)] } refetch={refetchGroupId}/> )
   }
 
   return (

@@ -4,9 +4,10 @@ import React, { useEffect } from "react";
 interface CreateChatProps {
   group: number;
   participants: number[];
+  refetch: () => void;
 }
 
-const CreateChatComponent: React.FC<CreateChatProps> = ({ group, participants }) => {
+const CreateChatComponent: React.FC<CreateChatProps> = ({ group, participants, refetch }) => {
   const [createChat] = useCreateChatMutation();
 
   const handleCreateChat = async () => {
@@ -23,7 +24,8 @@ const CreateChatComponent: React.FC<CreateChatProps> = ({ group, participants })
   };
   useEffect(() => {
     handleCreateChat();
-  });
+    refetch();
+  }, []);
   return <div>Чат створюється автоматично...</div>;
 };
 

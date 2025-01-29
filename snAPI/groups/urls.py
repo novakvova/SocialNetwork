@@ -1,9 +1,11 @@
 from django.urls import path
-from .views import GroupListCreateView, GroupDetailView, AddMemberView, RemoveMemberView, GroupMembersView
+from .views import  AddMemberView, RemoveMemberView, GroupMembersView, GroupViewSet
+from rest_framework.routers import DefaultRouter
 
-urlpatterns = [
-    path('', GroupListCreateView.as_view(), name='group-list-create'),
-    path('<int:pk>/', GroupDetailView.as_view(), name='group-detail'),
+router = DefaultRouter()
+router.register(r'', GroupViewSet, basename='group')
+
+urlpatterns = router.urls + [
     path('<int:pk>/add-member/', AddMemberView.as_view(), name='add-member'),
     path('<int:pk>/remove-member/', RemoveMemberView.as_view(), name='remove-member'),
     path('<int:pk>/group-member/', GroupMembersView.as_view(), name='group-member'),

@@ -31,12 +31,6 @@ const CreateGroupPage = () => {
             form.resetFields();
         } catch (err) {
             console.error("Помилка створення групи або чату:", err);
-
-            // Показуємо повідомлення про помилку
-            notification.error({
-                message: 'Помилка',
-                description: 'Щось пішло не так, спробуйте ще раз.',
-            });
         }
     };
 
