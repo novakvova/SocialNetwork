@@ -25,17 +25,17 @@ export const apiToken = {
     const token = this.getAccessToken();
     if (!token) return null;
 
-    try {
-      const payload = jwtDecode<TokenPayloadItems>(token);
-      return {
-        id: payload["user_id"],
-        email: payload["email"],
-        role: payload["role"],
-        exp: payload["exp"],
-      };
-    } catch (error) {
-      console.error("Failed to decode token:", error);
-      return null;
+        try {
+            const payload = jwtDecode<TokenPayloadItems>(token);
+              return {
+                id: payload["user_id"],
+                email: payload["email"],
+                role: payload["role"],
+                exp: payload["exp"],
+              };
+        } catch (error) {
+            console.error("Failed to decode token:", error);
+            return null;
+        }
     }
-  },
 };

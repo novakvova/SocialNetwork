@@ -8,7 +8,7 @@ export const api = createApi({
     endpoints: (builder) => ({
         getContacts: builder.query<Contact[], void>({
             query: () => 'users',
-        }),
+        }),      
         getUser: builder.query<Contact, number>({
             query: (id) => `users/${id}/`,
         }),
@@ -38,4 +38,4 @@ export const api = createApi({
     
 });
 
-export const { useGetContactsQuery, useGetUserQuery, useRegisterUserMutation, useLoginUserMutation } = api;
+export const { useGetContactsQuery, useRegisterUserMutation, useLoginUserMutation, useGetUserQuery } = api;

@@ -1,3 +1,79 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* NewsFeed.css */
+
+.news-feed-container {
+  max-width: 800px; /* Обмеження ширини для комфортного перегляду */
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.news-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Відстань між картками */
+}
+
+.news-item {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+
+.news-item h2 {
+  font-size: 1.25rem;
+  margin: 0;
+  color: #333;
+}
+
+.news-item p {
+  margin-top: 10px;
+  color: #555;
+  font-size: 1rem;
+}
+
+.news-item-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.news-item-actions button {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #007bff;
+  font-size: 14px;
+}
+
+.news-item-actions button:hover {
+  text-decoration: underline;
+}
+
+.news-item-actions button svg {
+  width: 18px;
+  height: 18px;
+  margin-right: 5px;
+}
+
+@media (max-width: 768px) {
+  .news-feed-container {
+    padding: 10px;
+  }
+
+  .news-item h2 {
+    font-size: 1.1rem;
+  }
+
+  .news-item p {
+    font-size: 0.95rem;
+  }
+}
+
