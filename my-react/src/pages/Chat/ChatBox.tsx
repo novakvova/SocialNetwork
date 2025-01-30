@@ -37,7 +37,7 @@ const ChatBox = ({ group }: { group: number }) => {
 
   if (isChatLoading) return <Spin size="large" />;
   if (chatId === undefined) {
-    return (<CreateChatComponent group={Number(group)} participants={[Number(userId)] } refetch={refetchGroupId}/> )
+    return (<CreateChatComponent group={Number(group)} participants={[Number(userId)] } is_group={true} refetch={refetchGroupId}/> )
   }
 
   return (

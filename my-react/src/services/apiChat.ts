@@ -31,6 +31,11 @@ export const apiChat = createApi({
       providesTags: (_, __, id) => [{ type: 'Chat', id }],
     }),
 
+    getPrivateChat: builder.query<IChatItem[], number>({
+      query: (id) => `chats/?participants=${id}&is_group=false`,
+      providesTags: (_, __, id) => [{ type: 'Chat', id: id }],
+    }),
+    
     // Отримати конкретний чат за groupId
     getChatByGroupId: builder.query<IChatItem[], number>({
       query: (group) => ({
@@ -114,6 +119,7 @@ export const apiChat = createApi({
 export const {
   useGetChatsQuery,
   useGetChatQuery,
+  useGetPrivateChatQuery,
   useGetChatByGroupIdQuery,
   useCreateChatMutation,
   useUpdateChatMutation,

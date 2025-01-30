@@ -11,10 +11,10 @@ class ChatViewSet(ModelViewSet):
     queryset = Chat.objects.all()
     serializer_class = ChatSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['group']
+    filterset_fields = ['group', 'participants','is_group']
+    
+    
 
-    
-    
 class MessageViewSet(ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer

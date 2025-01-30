@@ -4,19 +4,29 @@ import React, { useEffect } from "react";
 interface CreateChatProps {
   group: number;
   participants: number[];
+  is_group: boolean;
   refetch: () => void;
 }
 
-const CreateChatComponent: React.FC<CreateChatProps> = ({ group, participants, refetch }) => {
+const CreateChatComponent: React.FC<CreateChatProps> = ({ group, participants, is_group,  refetch }) => {
   const [createChat] = useCreateChatMutation();
 
   const handleCreateChat = async () => {
     try {
-      await createChat({
-        group: group,
-        is_group: true,
-        participants: participants,
-      }).unwrap();
+      if(is_group === false){
+        await createChat({
+          group: undefined,
+          is_group: is_group,
+          participants: participants,
+        }).unwrap();
+      }
+      else{
+        await createChat({
+          group: group,
+          is_group: is_group,
+          participants: participants,
+        }).unwrap();
+      }
       console.log("Чат створено успішно");
     } catch (error) {
       console.error("Помилка при створенні чату:", error);
