@@ -6,7 +6,6 @@ import { Col, Row } from "antd";
 const NewsFeed: React.FC = () => {
 
   const { data: posts = [], isLoading, isError } = useGetPostsQuery();
-
   const [likePost] = useLikePostMutation();
   const [commentPost] = useCommentPostMutation();
 

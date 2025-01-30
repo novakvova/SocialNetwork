@@ -59,5 +59,7 @@ pip install django-cors-headers
 pip install channels
 pip freeze > requirements.txt         - копіює всі залежності (пакети) у файл requirements.txt якщо він використовується
 docker build -t komar-django .
+pip install channels channels_redis
+
 --------------------------
 start-project.bat

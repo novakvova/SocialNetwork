@@ -3,13 +3,11 @@ import TextArea from "antd/es/input/TextArea";
 import { useNavigate } from "react-router-dom";
 import { IGroupPostRequest } from '../../models/types';
 import { useCreateGroupMutation } from '../../services/apiGroup';
-import { useCreateChatMutation } from '../../services/apiChat';  // Імпортуємо мутацію для чату
 
 const { Item } = Form;
 
 const CreateGroupPage = () => {
     const [createGroup] = useCreateGroupMutation();
-    const [createChat] = useCreateChatMutation();  // Ініціалізуємо мутацію для чату
     const [form] = Form.useForm<IGroupPostRequest>();
     const navigation = useNavigate();
 
@@ -19,9 +17,6 @@ const CreateGroupPage = () => {
             const response = await createGroup(values).unwrap();
             console.log("Response:", response);
 
-            // Створення чату з отриманими даними
-            const chatData = { name: response.name, group: response.id };  // Використовуємо ID групи для чату
-            await createChat(chatData).unwrap();  // Викликаємо мутацію для створення чату
 
             // Показуємо повідомлення про успіх
             notification.success({
@@ -36,12 +31,6 @@ const CreateGroupPage = () => {
             form.resetFields();
         } catch (err) {
             console.error("Помилка створення групи або чату:", err);
-
-            // Показуємо повідомлення про помилку
-            notification.error({
-                message: 'Помилка',
-                description: 'Щось пішло не так, спробуйте ще раз.',
-            });
         }
     };
 
