@@ -1,5 +1,5 @@
-import React from "react";
-import { useGetPostsQuery, useLikePostMutation, useCommentPostMutation } from "../services/apiPost";
+import React, {useState}from "react";
+import { useGetPostsQuery, useLikePostMutation, useCommentPostMutation,useCreatePostMutation } from "../services/apiPost";
 import PostCard from "../components/compon/card/PostCard";
 import { Col, Row } from "antd";
 
@@ -9,20 +9,26 @@ const NewsFeed: React.FC = () => {
   const [likePost] = useLikePostMutation();
   const [commentPost] = useCommentPostMutation();
 
+  const [createPost] = useCreatePostMutation();
+  const [newPost, setNewPost] = useState({ title: "", content: "", image: "" });
+
   const handleLike = (postId: number) => {
     likePost(postId);
   };
-
+  const handleCreatePost = async () => {
+    if (!newPost.title || !newPost.content) return;
+    await createPost(newPost);
+    setNewPost({ title: "", content: "", image: "" });
+};
   const handleComment = (postId: number, comment: string) => {
     commentPost({ postId, content: comment });
   };
 
   return (
-    <Row>
-      <Col span={8}></Col>
-      <Col span={8}>
+    
         <div className="p-4">
-          <h1 className="text-3xl font-bold text-gray-800 mb-6">Your Feed</h1>
+           
+          <h1 className="text-3xl font-bold text-gray-800 mb-6">YOUR FEED</h1>
           {isLoading ? (
             <p className="text-gray-600">Downloading...</p>
           ) : isError ? (
@@ -30,6 +36,7 @@ const NewsFeed: React.FC = () => {
           ) : posts.length === 0 ? (
             <p>Nothing To Download</p>
           ) : (
+
             <div className="container mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-1">
                 {posts.map((post) => (
@@ -37,11 +44,11 @@ const NewsFeed: React.FC = () => {
                 ))}
               </div>
             </div>
+            
           )}
         </div>
-      </Col>
-      <Col span={8}></Col>
-    </Row>
+        
+      
   );
 };
 

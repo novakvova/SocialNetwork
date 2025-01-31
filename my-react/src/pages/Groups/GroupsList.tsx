@@ -7,6 +7,8 @@ import { RootState } from "../../redux/store";
 import { IGroupItem } from "../../models/types";
 import { useState } from "react";
 import defaultProfile from "../../assets/images/ItGram.webp";
+import { Col, Row } from "antd"
+import SideIntro from "../../components/SideIntro";
 
 const GroupsListPage: React.FC = () => {
     const { data: list, isLoading, error, refetch: refetchGroup } = useGetGroupsQuery();
@@ -31,7 +33,12 @@ const GroupsListPage: React.FC = () => {
     const paginatedList = list?.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
     return (
-        <div className="max-w-4xl mx-auto">
+        <Row>
+                  <Col span={8}>
+                    <SideIntro/>
+                  </Col>
+                  <Col span={8}>
+                  <div className="max-w-4xl mx-auto">
             {/* Заголовок з кнопкою "+" */}
             <div className="flex items-center justify-between my-4 mt-0">
                 <h1 className="text-4xl  font-extrabold bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
@@ -94,6 +101,11 @@ const GroupsListPage: React.FC = () => {
                 />
             </div>
         </div>
+            </Col>
+                  <Col span={8}>
+                  </Col>
+                </Row>
+        
     );
 };
 

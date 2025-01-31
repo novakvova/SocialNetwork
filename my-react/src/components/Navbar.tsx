@@ -7,6 +7,7 @@ import {
     ArrowRightStartOnRectangleIcon,
     ArrowLeftEndOnRectangleIcon,
     IdentificationIcon,
+    PlusIcon,
 
 } from '@heroicons/react/24/solid';
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
@@ -36,7 +37,7 @@ const Navbar: React.FC = () => {
     };
 
     return (
-        <div className="w-full bg-white shadow-md text-gray-800">
+        <div className="navBar w-full bg-blue shadow-md text-white-1000">
             <div className="container mx-auto flex items-center justify-between h-16 px-4">
                 {/* Навігація */}
                 <nav className="flex space-x-6">
@@ -45,7 +46,7 @@ const Navbar: React.FC = () => {
                         className={`flex items-center space-x-2 ${current === '/' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
                         onClick={() => handleMenuClick('/')}
                     >
-                        <HomeIcon className="h-5 w-5" />
+                        <HomeIcon className="icon h-5 w-5" />
                         <span>Home</span>
                     </Link>
                     <Link
@@ -53,7 +54,7 @@ const Navbar: React.FC = () => {
                         className={`flex items-center space-x-2 ${current === '/contacts' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
                         onClick={() => handleMenuClick('/contacts')}
                     >
-                        <UserGroupIcon className="h-5 w-5" />
+                        <UserGroupIcon className="icon h-5 w-5" />
                         <span>Contacts</span>
                     </Link>
                     <Link
@@ -61,27 +62,30 @@ const Navbar: React.FC = () => {
                         className={`flex items-center space-x-2 ${current === '/contacts' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
                         onClick={() => handleMenuClick('/contacts')}
                     >
-                        <UserGroupIcon className="h-5 w-5" />
+                        <UserGroupIcon className="icon h-5 w-5" />
                         <span>Groups</span>
                     </Link>
+                    
                     <Link
                         to="/settings"
                         className={`flex items-center space-x-2 ${current === '/settings' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
                         onClick={() => handleMenuClick('/settings')}
                     >
-                        <AdjustmentsHorizontalIcon className="h-5 w-5" />
-                        <span>Settings</span>
+                        <AdjustmentsHorizontalIcon className="icon h-5 w-5" />
+                        <span>About</span>
                     </Link>
                     <Link
                         to="/search"
                         className={`flex items-center space-x-2 ${current === '/search' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
                         onClick={() => handleMenuClick('/search')}
                     >
-                        <MagnifyingGlassIcon className="h-5 w-5" />
+                        <MagnifyingGlassIcon className="icon h-5 w-5" />
                         <span>Search</span>
                     </Link>
+                    
                 </nav>
-
+                
+                <p>Social media for programmers</p>
                 {/* Аутентифікація */}
                 <div className="flex items-center space-x-4">
                     {isAuth ? (
@@ -98,7 +102,7 @@ const Navbar: React.FC = () => {
                                 onClick={handleLogout}
                                 className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
                             >
-                                <ArrowRightStartOnRectangleIcon className="h-5 w-5" />
+                                <ArrowRightStartOnRectangleIcon className="icon h-5 w-5" />
                                 <span>Logout</span>
                             </button>
                         </>
@@ -109,7 +113,7 @@ const Navbar: React.FC = () => {
                                 className={`flex items-center space-x-2 ${current === '/login' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
                                 onClick={() => handleMenuClick('/login')}
                             >
-                                <ArrowLeftEndOnRectangleIcon className="h-5 w-5" />
+                                <ArrowLeftEndOnRectangleIcon className="icon h-5 w-5" />
                                 <span>Login</span>
                             </Link>
                             <Link 
@@ -117,7 +121,7 @@ const Navbar: React.FC = () => {
                                 className={`flex items-center space-x-2 ${current === '/register' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
                                 onClick={() => handleMenuClick('/register')}
                             >
-                                <IdentificationIcon className="h-5 w-5" />
+                                <IdentificationIcon className="icon h-5 w-5" />
                                 <span>Register</span>
                             </Link>
                         </>

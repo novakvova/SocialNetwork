@@ -8,17 +8,19 @@ from .serializers import PostSerializer, CommentSerializer
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all().order_by('-created_at')
     serializer_class = PostSerializer
+    
 
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
-    def like_post(self, request, pk=None): 
+    def like_post(self, request, pk=None):
         post = self.get_object()
         like, created = Like.objects.get_or_create(post=post, user=request.user)
         if not created:
-            return Response({"message": "Ви вже лайкнули цей пост!"}, status=status.HTTP_400_BAD_REQUEST)
+            like.delete()
+            return Response({"message": "Лайк видалено!"}, status=status.HTTP_200_OK)
         return Response({"message": "Лайк додано!"}, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
-    def comment(self, request, pk=None): 
+    def comment(self, request, pk=None):
         post = self.get_object()
         content = request.data.get('content')
         if not content:
@@ -29,7 +31,6 @@ class PostViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def comments(self, request, pk=None):
-       
         post = self.get_object()
         comments = post.comments.all()
         return Response(CommentSerializer(comments, many=True).data)

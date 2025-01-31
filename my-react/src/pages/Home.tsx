@@ -1,18 +1,22 @@
 import React from "react";
 import NewsFeed from "../components/NewsFeed";
+import { Col, Row } from "antd"
+import SideIntro from "../components/SideIntro";
+
 
 const Home: React.FC = () => {
     return (
         <div>
-
-
-            <h1 className="text-4xl font-bold text-gray-800">ITGram</h1>
-            <p className="mt-4 text-gray-600">
-                Вітаємо на нашій головній сторінці! Дізнайтеся більше про нас.
-            </p>
-
-            <NewsFeed />
-            
+            <Row>
+                  <Col span={8}>
+                    <SideIntro/>
+                  </Col>
+                  <Col span={8}>
+            <NewsFeed /> 
+            </Col>
+                  <Col span={8}>
+                  </Col>
+                </Row>
         </div>
         
     );

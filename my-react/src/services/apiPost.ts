@@ -40,6 +40,14 @@ export const apiPosts = createApi({
             query: ({ postId }) => `posts/posts/${postId}/comments/`,
             providesTags: ['Comments'],
         }),
+        createPost: builder.mutation<Post, { title: string; content: string; image?: string }>({
+            query: (postData) => ({
+                url: "posts/posts/create_post/",
+                method: "POST",
+                body: postData,
+            }),
+            invalidatesTags: ["Post"],
+        }),
     }),
 });
 
@@ -48,4 +56,5 @@ export const {
     useLikePostMutation,
     useCommentPostMutation,
     useGetCommentsQuery,
+    useCreatePostMutation,
 } = apiPosts;
