@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'groups',
     'posts',
     'chats',
-
+    'search',
 ]
 
 MIDDLEWARE = [
