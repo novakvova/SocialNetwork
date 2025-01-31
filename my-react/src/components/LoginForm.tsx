@@ -6,6 +6,8 @@ import { apiAccount } from "../services/apiAccount";
 import { apiToken } from "../services/apiToken";
 import { setAccount } from "../redux/account/accountSlice";
 import { useDispatch } from "react-redux";
+import { Col, Row } from "antd"
+import SideIntro from "../components/SideIntro";
 
 const LoginForm = () => {
     const [activeTab, setActiveTab] = useState("account");
@@ -39,7 +41,13 @@ const LoginForm = () => {
   };
   
     return (
-        <div style={{ maxWidth: 400, margin: "50px auto", padding: 20, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+        <Row>
+                  <Col span={8}>
+                    
+                  </Col>
+                  <Col span={8}>
+                  
+                  <div style={{ maxWidth: 400, margin: "50px auto", padding: 20, border: "1px solid #f0f0f0", borderRadius: 8 }}>
             <Tabs centered activeKey={activeTab} onChange={setActiveTab} items={[{
                 key: "account",
                 label: "Login",
@@ -79,6 +87,12 @@ const LoginForm = () => {
                 ),
             }]} />
         </div>
+        <SideIntro/>
+            </Col>
+                  <Col span={8}>
+                  </Col>
+                </Row>
+       
     );
 };
 

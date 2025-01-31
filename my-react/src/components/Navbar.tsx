@@ -7,6 +7,7 @@ import {
     ArrowRightStartOnRectangleIcon,
     ArrowLeftEndOnRectangleIcon,
     IdentificationIcon,
+    PlusIcon,
 
 } from '@heroicons/react/24/solid';
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
@@ -64,13 +65,14 @@ const Navbar: React.FC = () => {
                         <UserGroupIcon className="icon h-5 w-5" />
                         <span>Groups</span>
                     </Link>
+                    
                     <Link
                         to="/settings"
                         className={`flex items-center space-x-2 ${current === '/settings' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
                         onClick={() => handleMenuClick('/settings')}
                     >
                         <AdjustmentsHorizontalIcon className="icon h-5 w-5" />
-                        <span>Settings</span>
+                        <span>About</span>
                     </Link>
                     <Link
                         to="/search"
@@ -80,7 +82,9 @@ const Navbar: React.FC = () => {
                         <MagnifyingGlassIcon className="icon h-5 w-5" />
                         <span>Search</span>
                     </Link>
+                    
                 </nav>
+                
                 <p>Social media for programmers</p>
                 {/* Аутентифікація */}
                 <div className="flex items-center space-x-4">

@@ -2,6 +2,8 @@ import { Form, Input, Button, DatePicker, notification } from 'antd';
 import { useRegisterUserMutation } from '../services/apiUser';
 import { RegisterField } from '../models/accounts';
 import { IRegisterFormValues } from '../models/types';
+import { Col, Row } from "antd"
+import SideIntro from "../components/SideIntro";
 
 const { Item } = Form;
 
@@ -36,6 +38,11 @@ const Register = () => {
   };
 
   return (
+    <Row>
+                  <Col span={8}>
+                    
+                  </Col>
+                  <Col span={8}>
     <div style={{ maxWidth: '400px', margin: '0 auto' }}>
       <h2>Реєстрація</h2>
       <Form
@@ -105,6 +112,11 @@ const Register = () => {
         </Item>
       </Form>
     </div>
+    <SideIntro/>
+            </Col>
+                  <Col span={8}>
+                  </Col>
+                </Row>
   );
 };
 

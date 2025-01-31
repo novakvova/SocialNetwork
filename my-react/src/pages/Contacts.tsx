@@ -3,6 +3,8 @@ import { useGetContactsQuery, useGetUserQuery } from "../services/apiUser";
 import PrivateChat from "./Chat/PrivateChat";
 import { Spin, Alert, Button } from "antd";
 import { ArrowLeftOutlined, UserOutlined } from "@ant-design/icons";
+import { Col, Row } from "antd"
+import SideIntro from "../components/SideIntro";
 
 const Contacts: React.FC = () => {
   const { data, isLoading, error } = useGetContactsQuery();
@@ -32,7 +34,13 @@ const Contacts: React.FC = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-6">
+    <div>
+            <Row>
+                  <Col span={8}>
+                    <SideIntro/>
+                  </Col>
+                  <Col span={8}>
+                  <div className="max-w-4xl mx-auto py-6">
       <div className="text-center text-4xl font-extrabold bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500 my-4">
         {selectedContact ? `Чат з ${dataUser?.username}` : "Контакти"}
       </div>
@@ -79,6 +87,12 @@ const Contacts: React.FC = () => {
         )}
       </div>
     </div>
+            </Col>
+                  <Col span={8}>
+                  </Col>
+                </Row>
+        </div>
+    
   );
 };
 
