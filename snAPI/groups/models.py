@@ -7,7 +7,7 @@ class Group(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="created_groups")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    image = models.ImageField(upload_to='group_images/', null=True, blank=True)    
     def __str__(self):
         return self.name
 

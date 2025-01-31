@@ -11,11 +11,7 @@ const PrivateChat = ({ selectedContactId }: { selectedContactId: number }) => {
     const [createMessage, { isLoading: isSending }] = useCreateMessageMutation();
     const userId = useSelector((state: RootState) => state.account.account?.id);
     const { data, isLoading: isChatLoading, error: chatError, refetch: refetchGroupId} = useGetPrivateChatQuery(selectedContactId);
-    const { data: dataUser} = useGetPrivateChatQuery(Number(userId));
     const chatId = data?.[0]?.id; 
-    const chatByUserId = dataUser?.[0]?.id; 
-    
-    console.log("Chat id :", chatId)
 
     const handleSendMessage = async () => {
       if (messageContent.trim()) {
@@ -38,7 +34,7 @@ const PrivateChat = ({ selectedContactId }: { selectedContactId: number }) => {
       }
     };
     const handleChatMessadge = () => {
-        if(chatId===chatByUserId){
+        if(chatId){
             return <ChatMessages chatId={Number(chatId)} />;
         }
     }
@@ -53,7 +49,7 @@ const PrivateChat = ({ selectedContactId }: { selectedContactId: number }) => {
         {/* Вставляємо компонент ChatMessages */}
         <div className="messages-list" style={{ padding: '20px', height: '400px', overflowY: 'auto' }}>
           {chatError ? (
-            <div>Failed to load messages</div>
+            <Spin size="large" />
           ) : (
             handleChatMessadge()
           )}

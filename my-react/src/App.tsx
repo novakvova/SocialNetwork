@@ -36,6 +36,7 @@ function App() {
                         <Route path="details/:id" element={<GroupDetailsPage />} />
                     </Route>
                 </Route>
+
             </Routes>
         </>
     )
