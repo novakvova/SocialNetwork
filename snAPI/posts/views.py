@@ -8,6 +8,7 @@ from .serializers import PostSerializer, CommentSerializer
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all().order_by('-created_at')
     serializer_class = PostSerializer
+    
 
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def like_post(self, request, pk=None):

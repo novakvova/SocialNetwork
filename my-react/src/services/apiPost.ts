@@ -40,6 +40,7 @@ export const apiPosts = createApi({
             query: ({ postId }) => `posts/posts/${postId}/comments/`,
             providesTags: ['Comments'],
         }),
+        
     }),
 });
 
