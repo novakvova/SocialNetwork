@@ -4,11 +4,7 @@ import NewsFeed from "../components/NewsFeed";
 const Home: React.FC = () => {
     return (
         <div>
-
-            
-
-            <NewsFeed />
-            
+            <NewsFeed /> 
         </div>
         
     );
