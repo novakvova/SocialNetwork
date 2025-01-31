@@ -58,6 +58,8 @@ urlpatterns = [
 
 
     path('api/', include('chats.urls')), 
+
+    path('search/', include('search.urls')),
 ]
 
 if settings.DEBUG:
