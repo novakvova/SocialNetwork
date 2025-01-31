@@ -34,6 +34,8 @@ function App() {
                     <Route path="edit/:id" element={<EditGroupPage />} />
                     <Route path="details/:id" element={<GroupDetailsPage />} />
                 </Route>
+                <Route path="/hcat"></Route>
+
             </Route>
         </Routes>
     )

@@ -15,7 +15,7 @@ const MessageItem = ({ message, refetch }: { message: { id: number; chat: number
     try {
       await deleteMessage({ messageId: message.id }).unwrap();
       antdMessage.success("Повідомлення видалено!");
-      refetch(); // Оновлюємо список повідомлень після видалення
+      refetch(); 
     } catch {
       antdMessage.error("Помилка видалення повідомлення!");
     }
@@ -34,7 +34,7 @@ const MessageItem = ({ message, refetch }: { message: { id: number; chat: number
       await updateMessage(updatePayload).unwrap();
       setIsEditing(false);
       antdMessage.success("Повідомлення змінено!");
-      refetch(); // Оновлюємо список повідомлень після зміни
+      refetch(); 
     } catch {
       antdMessage.error("Помилка зміни повідомлення!");
     }
@@ -46,16 +46,19 @@ const MessageItem = ({ message, refetch }: { message: { id: number; chat: number
   ];
 
   return (
-    <li className="message-item">
-      <p>
-        <strong>{user.data?.username}</strong>: {message.content}
-      </p>
-      <p>
-        <small>{new Date(message.timestamp).toLocaleString()}</small>
-        <Dropdown menu={{ items: menuItems }} trigger={["click"]}>
-          <Button icon={<EllipsisOutlined />} size="small" />
-        </Dropdown>
-      </p>
+    <li className="message-item flex mb-4 p-4 border-b border-gray-300">
+      <div className="flex-1 flex flex-col">
+        <div className="flex justify-between items-center">
+          <p className="font-bold text-left">{user.data?.username}</p>
+          <Dropdown menu={{ items: menuItems }} trigger={["click"]}>
+            <Button icon={<EllipsisOutlined />} size="small" />
+          </Dropdown>
+        </div>
+        <p className="text-left">{message.content}</p>
+      </div>
+      <div className="flex flex-col items-end">
+        <p className="text-sm text-gray-500">{new Date(message.timestamp).toLocaleString()}</p>
+      </div>
 
       <Modal
         title="Змінити повідомлення"

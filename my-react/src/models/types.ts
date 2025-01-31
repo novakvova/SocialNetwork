@@ -12,17 +12,21 @@ export interface IGroupItem {
     name: string;
     description: string;
     created_by: string;
+    image?: string;
 }
 
 export interface IGroupPostRequest {
     name: string;
     description: string;
+    image?: FormData;
+
 }
 
 export interface IGroupPutRequest {
     id: number;
-    name?: string;
+    name: string;
     description?: string;
+    image?: FormData;
 }
 
 export interface Contact {

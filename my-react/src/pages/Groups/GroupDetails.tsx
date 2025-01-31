@@ -1,28 +1,25 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useGetGroupMembersQuery, useGetGroupQuery, useJoinGroupMutation, useLeaveGroupMutation } from '../../services/apiGroup';
-import { Spin, Alert, Button, notification } from 'antd';
+import { Spin, Alert, Button, notification, Card, Dropdown, Menu } from 'antd';
+import { ArrowLeftOutlined, DownOutlined } from '@ant-design/icons';
 import ChatBox from '../Chat/ChatBox';
 import { RootState } from "../../redux/store";
 import { useSelector } from 'react-redux';
+import defaultProfile from "../../assets/images/ItGram.webp";
 
 const GroupDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const groupId = Number(id);
   const userId = useSelector((state: RootState) => state.account.account?.id);
-  const { data: group, error: groupError, isLoading: groupLoading} = useGetGroupQuery(groupId);
-  const { data: groupMembers, error: membersError, isLoading: membersLoading, refetch: refetchMembers} = useGetGroupMembersQuery(groupId);
+  const { data: group, error: groupError, isLoading: groupLoading } = useGetGroupQuery(groupId);
+  const { data: groupMembers, error: membersError, isLoading: membersLoading, refetch: refetchMembers } = useGetGroupMembersQuery(groupId);
   const [joinGroup] = useJoinGroupMutation();
   const [leaveGroup] = useLeaveGroupMutation();
-
-  // Перевірка, чи є користувач учасником групи
   const isMember = groupMembers?.members?.some(member => member.id === Number(userId));
+  const navigation = useNavigate();
 
   if (groupLoading || membersLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Spin size="large" />
-      </div>
-    );
+    return <div className="flex justify-center items-center h-screen"><Spin size="large" /></div>;
   }
 
   const handleAction = async (groupId: number, action: "join" | "leave") => {
@@ -41,78 +38,60 @@ const GroupDetailsPage: React.FC = () => {
   };
 
   if (groupError || membersError) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Alert message="Помилка завантаження" description="Щось пішло не так, спробуйте ще раз." type="error" showIcon />
-      </div>
-    );
+    return <div className="flex justify-center items-center h-screen"><Alert message="Помилка завантаження" description="Щось пішло не так, спробуйте ще раз." type="error" showIcon /></div>;
   }
 
+  const membersMenu = (
+    <Menu>
+      {groupMembers?.members?.length ? (
+        groupMembers.members.map((member) => (
+          <Menu.Item key={member.id}>{member.username}</Menu.Item>
+        ))
+      ) : (
+        <Menu.Item disabled>У групі ще немає учасників.</Menu.Item>
+      )}
+    </Menu>
+  );
+
   return (
-    <div className="flex flex-col md:flex-row h-screen">
-      <div className="md:w-1/3 p-6 bg-gray-100 overflow-y-auto">
-        <h1 className="text-2xl font-bold mb-4">Деталі групи</h1>
-        <p><strong>Назва групи:</strong> {group?.name}</p>
-        <p><strong>Опис групи:</strong> {group?.description}</p>
-
-        {/* Кнопка "Покинути" - показується, якщо користувач є учасником */}
-        <Button
-            type="primary"
-            danger
-            onClick={() => handleAction(groupId, "leave")}
-            disabled={!isMember}
-            style={{ display: isMember ? "block" : "none" }}
-        >
-            Покинути
-        </Button>
-
-        {/* Кнопка "Приєднатися" - показується, якщо користувач не є учасником */}
-        <Button
-            type="primary"
-            onClick={() => handleAction(groupId, "join")}
-            disabled={isMember}
-            style={{ display: !isMember ? "block" : "none" }}
-        >
-            Приєднатися
-        </Button>
-
-        <h2 className="text-xl font-bold mt-6 mb-4">Учасники групи:</h2>
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-sm text-left text-gray-500">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-3">Ім'я</th>
-                <th scope="col" className="px-6 py-3">Роль</th>
-              </tr>
-            </thead>
-            <tbody>
-              {groupMembers?.members?.length ? (
-                groupMembers.members.map((member) => (
-                  <tr key={member.id} className="bg-white border-b">
-                    <td className="px-6 py-4">{member.username}</td>
-                    <td className="px-6 py-4">{member.role}</td>
-                  </tr>
-                ))
+    <div className="max-w-4xl mx-auto py-2">
+      <Card className="shadow-lg rounded-lg border p-4 mb-6">
+        <div className="flex items-center space-x-3">
+          <img src={group?.image || defaultProfile} alt="Фото групи" className="w-16 h-16 object-cover rounded-xl " />
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold mb-2">{group?.name}</h2>
+            <p className="text-gray-600 mb-4">{group?.description}</p>
+          </div>
+          <div className="flex space-x-4">
+            <div className="flex flex-col space-y-2 mt-4">
+              {isMember ? (
+                <Button type="primary" danger onClick={() => handleAction(groupId, "leave")}>Покинути</Button>
               ) : (
-                <tr>
-                  <td colSpan={2} className="px-6 py-4 text-center">
-                    У групі ще немає учасників.
-                  </td>
-                </tr>
+                <Button type="primary" onClick={() => handleAction(groupId, "join")}>Приєднатися</Button>
               )}
-            </tbody>
-          </table>
+              <Dropdown overlay={membersMenu} trigger={['click']}>
+                <Button className="mt-2">Учасники <DownOutlined /></Button>
+              </Dropdown>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div className="md:w-2/3 p-6 bg-white overflow-y-auto">
-        <h2 className="text-center text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500 my-6">
-          Чат групи
-        </h2>
-        <div className="bg-gray-50 border rounded-lg p-4 h-full">
+      </Card>
+      <Card className="shadow-lg rounded-lg border p-6">
+        <h2 className="text-center text-4xl font-extrabold bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500 my2">Чат групи</h2>
+        <div>
+          <Button 
+            type="link" 
+            icon={<ArrowLeftOutlined />} 
+            className="mb-4 mt-0 text-blue-500"
+            onClick={() => navigation("..")}
+          >
+            Назад до груп
+          </Button>
+        </div>
+        <div className="h-96 overflow-auto flex flex-col-reverse">
           <ChatBox group={groupId} />
         </div>
-      </div>
+      </Card>
     </div>
   );
 };

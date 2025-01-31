@@ -25,19 +25,20 @@ export const apiGroup = createApi({
             query: (id) => `groups/${id}/`,
             providesTags: (_, __, id) => [{ type: 'Group', id }],
         }),
-        createGroup: builder.mutation<IGroupItem, IGroupPostRequest>({
-            query: (newGroup) => ({
+        createGroup: builder.mutation<IGroupPostRequest, FormData>({
+            query: (formData) => ({
                 url: 'groups/',
                 method: 'POST',
-                body: newGroup,
+                body: formData,
             }),
             invalidatesTags: ["Group"],
         }),
-        updateGroup: builder.mutation<IGroupItem, IGroupPutRequest>({
-            query: ({ id, ...updatedGroup }) => ({
+        
+        updateGroup: builder.mutation<IGroupPutRequest, { id: number, formData: FormData }>({
+            query: ({ id, formData }) => ({
                 url: `groups/${id}/`,
                 method: 'PUT',
-                body: updatedGroup,
+                body: formData,
             }),
             invalidatesTags: ["Group"],
         }),

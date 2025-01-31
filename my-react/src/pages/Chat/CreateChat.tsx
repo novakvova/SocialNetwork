@@ -1,5 +1,6 @@
 import { useCreateChatMutation } from "../../services/apiChat";
 import React, { useEffect } from "react";
+import { Spin } from "antd";
 
 interface CreateChatProps {
   group: number;
@@ -36,7 +37,7 @@ const CreateChatComponent: React.FC<CreateChatProps> = ({ group, participants, i
     handleCreateChat();
     refetch();
   }, []);
-  return <div>Чат створюється автоматично...</div>;
+  return <Spin size="large" />;
 };
 
 export default CreateChatComponent;
