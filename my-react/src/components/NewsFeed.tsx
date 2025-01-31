@@ -6,7 +6,6 @@ import { Col, Row } from "antd";
 const NewsFeed: React.FC = () => {
 
   const { data: posts = [], isLoading, isError } = useGetPostsQuery();
-
   const [likePost] = useLikePostMutation();
   const [commentPost] = useCommentPostMutation();
 
@@ -19,11 +18,9 @@ const NewsFeed: React.FC = () => {
   };
 
   return (
-    <Row>
-      <Col span={8}></Col>
-      <Col span={8}>
+    
         <div className="p-4">
-          <h1 className="text-3xl font-bold text-gray-800 mb-6">Your Feed</h1>
+          <h1 className="text-3xl font-bold text-gray-800 mb-6">YOUR FEED</h1>
           {isLoading ? (
             <p className="text-gray-600">Downloading...</p>
           ) : isError ? (
@@ -40,9 +37,7 @@ const NewsFeed: React.FC = () => {
             </div>
           )}
         </div>
-      </Col>
-      <Col span={8}></Col>
-    </Row>
+      
   );
 };
 

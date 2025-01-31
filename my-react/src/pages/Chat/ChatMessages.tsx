@@ -1,22 +1,17 @@
 import { useGetMessagesQuery } from "../../services/apiChat";
+import MessageItem from "./MessageItem";
 
 const ChatMessages = ({ chatId }: { chatId: number }) => {
-  const { data: messages, isLoading, error } = useGetMessagesQuery(chatId);
-  console.log("Chat Id :", chatId);
-
+  const { data: messages, isLoading, error, refetch } = useGetMessagesQuery(chatId);
 
   if (isLoading) return <p>Завантаження повідомлень...</p>;
   if (error) return <p>Помилка завантаження повідомлень!</p>;
 
   return (
     <div>
-      <h3>Повідомлення</h3>
       <ul>
         {messages?.map((message) => (
-          <li key={message.id}>
-            <p><strong>{message.sender}</strong>: {message.content}</p>
-            <p><small>{new Date(message.timestamp).toLocaleString()}</small></p>
-          </li>
+          <MessageItem key={message.id} message={message} chatId={chatId} refetch={refetch} />
         ))}
       </ul>
     </div>

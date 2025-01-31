@@ -7,7 +7,11 @@ npm install @reduxjs/toolkit react-redux
 npm install --save-dev @types/react-redux
 npm install jwt-decode
 npm install antd
+npm install antd@latest
 npm install --save react-infinite-scroll-component
+npm install socket.io-client
+npm install @types/socket.io-client --save-dev
+
 npm i axios
 cd my-react
 npm run dev

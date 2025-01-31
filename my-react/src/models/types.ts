@@ -34,7 +34,7 @@ export interface Contact {
 export interface IChatItem {
     id: number;
     is_group: boolean; 
-    participants:[];
+    participants: number[];
     group: number;
     messages: [
       {
@@ -48,9 +48,8 @@ export interface IChatItem {
     ],
   }
   export interface IChatPostRequest {
-    id: number;
     is_group: boolean; 
-    participants:[];
+    participants: number[];
     group: number;
   }
   
@@ -63,6 +62,14 @@ export interface IChatItem {
     is_read: boolean
   }
   export interface IMessagePostRequest{
+    chat: number;
+    sender: string;
+    content: string;
+    is_read: boolean
+  }
+  
+  export interface IMessagePutRequest{
+    id: number;
     chat: number;
     sender: string;
     content: string;
