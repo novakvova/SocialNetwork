@@ -1,0 +1,104 @@
+.message-item {
+    display: flex;
+    flex-direction: column;
+    background: #f5f5f5;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    max-width: 100%;
+  }
+  
+  .message-item .message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .message-item .message-content {
+    font-size: 16px;
+    color: #444;
+    margin: 5px 0;
+  }
+  
+  .message-item .message-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: #777;
+  }
+  
+  .message-item .edit-button {
+    cursor: pointer;
+    color: #1890ff;
+  }
+  
+  .message-item .edit-button:hover {
+    text-decoration: underline;
+  }
+  
+  .message-item.own {
+    align-self: flex-end;
+    background: #d1e7ff;
+  }
+  
+  .message-item .dropdown-button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    color: #777;
+  }
+
+.user_ddsname{
+    margin-bottom: 10px;
+    font-size: 10px;
+    text-transform: lowercase;
+    margin-left: 10px;
+    margin-top: 0px;
+}
+
+.username_logo{
+    margin-top: -12px;
+    display: flex;
+    justify-content: start;
+    align-items: center; 
+    height: 7vh;
+}
+
+.userlogo{
+    border-radius: 30px;
+    border: 1px solid black;
+    margin-top: 0px;
+    margin-right: 10px;
+    
+}
+
+.commentform{
+    display: flex;
+    justify-content: start;
+    align-items: center; /* Вирівнювання по вертикалі */
+    height: 4vh;
+}
+
+.likes_comment{
+    display: flex;
+    justify-content: start;
+}
+
+.likes{
+width: 50px;
+margin-right: 20px;
+
+}
+
+.titlepost{
+ padding-top: 20px;
+ padding-bottom: 10px;
+ font-size: 10px;
+ color: black;
+ font-weight: 700;
+}

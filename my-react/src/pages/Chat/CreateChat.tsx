@@ -1,24 +1,42 @@
-import { useCreateChatMutation } from '../../services/apiChat';
+import { useCreateChatMutation } from "../../services/apiChat";
+import React, { useEffect } from "react";
 
-const CreateChat = ({ groupid }: { groupid: number }) => {
+interface CreateChatProps {
+  group: number;
+  participants: number[];
+  is_group: boolean;
+  refetch: () => void;
+}
+
+const CreateChatComponent: React.FC<CreateChatProps> = ({ group, participants, is_group,  refetch }) => {
   const [createChat] = useCreateChatMutation();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await createChat({ group: groupid});
+  const handleCreateChat = async () => {
+    try {
+      if(is_group === false){
+        await createChat({
+          group: undefined,
+          is_group: is_group,
+          participants: participants,
+        }).unwrap();
+      }
+      else{
+        await createChat({
+          group: group,
+          is_group: is_group,
+          participants: participants,
+        }).unwrap();
+      }
+      console.log("Чат створено успішно");
+    } catch (error) {
+      console.error("Помилка при створенні чату:", error);
+    }
   };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="chatName">Chat Name</label>
-      <input
-        type="text"
-        id="chatName"
-        required
-      />
-      <button type="submit">Create Chat</button>
-    </form>
-  );
+  useEffect(() => {
+    handleCreateChat();
+    refetch();
+  }, []);
+  return <div>Чат створюється автоматично...</div>;
 };
 
-export default CreateChat;
+export default CreateChatComponent;
