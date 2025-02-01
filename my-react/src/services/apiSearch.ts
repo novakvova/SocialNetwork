@@ -1,11 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { APP_ENV } from "../env";
 import { apiToken } from "./apiToken";
+
+const BASE_URL = "http://127.0.0.1:9178/api";
 
 export const apiSearch = createApi({
   reducerPath: 'search',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${APP_ENV.REMOTE_BASE_URL}`,
+    baseUrl: BASE_URL,
     prepareHeaders: (headers) => {
       const token = apiToken.getAccessToken();
       if (token) {
@@ -15,10 +16,16 @@ export const apiSearch = createApi({
     },
   }),
   endpoints: (builder) => ({
-    search: builder.query<{ users: any[]; groups: any[]; posts: any[] }, string>({
-      query: (query) => `search/?q=${query}`,
+    searchUsers: builder.query<any[], string>({
+      query: (query) => `users/search?search=${encodeURIComponent(query)}`,
+    }),
+    searchGroups: builder.query< any[], string>({
+      query: (query) => `groups/search?search=${encodeURIComponent(query)}`,
+    }),
+    searchPosts: builder.query<any[], string>({
+      query: (query) => `posts/search?search=${encodeURIComponent(query)}`,
     }),
   }),
 });
 
-export const { useSearchQuery } = apiSearch;
+export const { useSearchUsersQuery, useSearchGroupsQuery, useSearchPostsQuery } = apiSearch;

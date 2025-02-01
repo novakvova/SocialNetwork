@@ -2,10 +2,11 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, filters
 from .models import Group, GroupMembership
 from .serializers import GroupSerializer
 from rest_framework.viewsets import ModelViewSet
+from django_filters.rest_framework import DjangoFilterBackend
 
 class GroupViewSet(ModelViewSet):
     queryset = Group.objects.all()
@@ -57,3 +58,10 @@ class GroupMembersView(APIView):
             for member in group.memberships.all()
         ]
         return Response({"members": members}, status=status.HTTP_200_OK)
+
+class GroupViewSet(ModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['created_by']
+    search_fields = ['name', 'description']

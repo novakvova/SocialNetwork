@@ -5,6 +5,7 @@ import { api } from '../services/apiUser';
 import { authMiddleware } from './middlewares/authMiddleware';
 import { apiChat } from '../services/apiChat';
 import { apiPosts } from "../services/apiPost";
+import { apiSearch } from '../services/apiSearch';
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     [apiGroup.reducerPath]: apiGroup.reducer, 
     [apiChat.reducerPath]: apiChat.reducer, 
     [apiPosts.reducerPath]: apiPosts.reducer,
+    [apiSearch.reducerPath]: apiSearch.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -20,6 +22,7 @@ export const store = configureStore({
       apiGroup.middleware, 
       apiChat.middleware, 
       apiPosts.middleware,
+      apiSearch.middleware,
       authMiddleware),
       
 });

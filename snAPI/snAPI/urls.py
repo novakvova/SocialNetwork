@@ -50,7 +50,7 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     
     # User app endpoints
-    path('api/', include('users.urls')),
+    path('api/users/', include('users.urls')),
     path('api/groups/', include('groups.urls')), 
 
     #posts
@@ -59,7 +59,7 @@ urlpatterns = [
 
     path('api/', include('chats.urls')), 
 
-    path('search/', include('search.urls')),
+    path('api/', include('search.urls')),
 ]
 
 if settings.DEBUG:
