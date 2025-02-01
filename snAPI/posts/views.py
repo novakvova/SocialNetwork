@@ -1,4 +1,5 @@
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets, filters
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -34,3 +35,10 @@ class PostViewSet(viewsets.ModelViewSet):
         post = self.get_object()
         comments = post.comments.all()
         return Response(CommentSerializer(comments, many=True).data)
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['created_at']
+    search_fields = ['title', 'content']

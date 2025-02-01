@@ -1,50 +1,106 @@
 import React, { useState } from 'react';
-import { useSearchQuery } from '../services/apiSearch';
+import { useSearchUsersQuery, useSearchGroupsQuery, useSearchPostsQuery } from '../services/apiSearch';
 
 const Search: React.FC = () => {
     const [query, setQuery] = useState('');
-    const { data, error, isLoading } = useSearchQuery(query, { skip: query.length < 1 });
+    const [isSearched, setIsSearched] = useState(true);
+
+    const { data: usersData, isLoading: usersLoading } = useSearchUsersQuery(query);
+    const { data: groupsData, isLoading: groupsLoading } = useSearchGroupsQuery(query);
+    const { data: postsData, isLoading: postsLoading } = useSearchPostsQuery(query);
+
+    const users = usersData ?? [];
+    const groups = groupsData ?? [];
+    const posts = postsData ?? [];
+
+    const handleSearch = () => {
+        if (query.trim().length >= 1) {
+            setIsSearched(true);
+            console.log(query);
+        }
+    };
+
+    console.log("Users Data:", usersData);
+    console.log("Groups Data:", groupsData);
+    console.log("Posts Data:", postsData);
+    console.log("Query:", query);
 
     return (
-        <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg">
-            <input
-                type="text"
-                placeholder="Введіть запит для пошуку..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            {isLoading && <p className="text-gray-500 mt-2 text-center">Завантаження...</p>}
-            {error && <p className="text-red-500 mt-2 text-center">Помилка завантаження. Спробуйте ще раз.</p>}
-            {data && (data.users.length || data.groups.length || data.posts.length) ? (
-                <div className="mt-4">
-                    {data.users.length > 0 && (
-                        <div>
-                            <h3 className="text-lg font-semibold border-b pb-1">Користувачі</h3>
-                            <ul className="list-disc pl-5">
-                                {data.users.map(user => <li key={user.id} className="py-1">{user.username}</li>)}
-                            </ul>
+        <div className="max-w-3xl mx-auto p-8 bg-white shadow-lg rounded-lg">
+            <div className="flex items-center space-x-4 mb-6">
+                <input
+                    type="text"
+                    placeholder="Введіть запит для пошуку..."
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                    onClick={handleSearch}
+                    className="p-3 bg-blue-500 text-white rounded-lg focus:outline-none hover:bg-blue-600"
+                >
+                    Пошук
+                </button>
+            </div>
+            {isSearched && query.length >= 1 && (
+            <div className="space-y-6">
+                {(usersLoading || groupsLoading || postsLoading) && (
+                    <p className="text-gray-500 text-center">Завантаження...</p>
+                )}
+
+                {!usersLoading && users.length > 0 && (
+                    <div>
+                        <h3 className="text-xl font-semibold text-gray-800 mb-4">Користувачі</h3>
+                        <div className="space-y-2">
+                            {users.map((user) => (
+                                <div
+                                    key={user.id}
+                                    className="p-3 border rounded-md cursor-pointer bg-white hover:bg-blue-100 transition"
+                                >
+                                    {user.username}
+                                </div>
+                            ))}
                         </div>
-                    )}
-                    {data.groups.length > 0 && (
-                        <div className="mt-4">
-                            <h3 className="text-lg font-semibold border-b pb-1">Групи</h3>
-                            <ul className="list-disc pl-5">
-                                {data.groups.map(group => <li key={group.id} className="py-1">{group.name}</li>)}
-                            </ul>
+                    </div>
+                )}
+
+                {!groupsLoading && groups.length > 0 && (
+                    <div>
+                        <h3 className="text-xl font-semibold text-gray-800 mb-4">Групи</h3>
+                        <div className="space-y-2">
+                            {groups.map((group) => (
+                                <div
+                                    key={group.id}
+                                    className="p-3 border rounded-md cursor-pointer bg-white hover:bg-blue-100 transition"
+                                >
+                                    {group.name}
+                                </div>
+                            ))}
                         </div>
-                    )}
-                    {data.posts.length > 0 && (
-                        <div className="mt-4">
-                            <h3 className="text-lg font-semibold border-b pb-1">Пости</h3>
-                            <ul className="list-disc pl-5">
-                                {data.posts.map(post => <li key={post.id} className="py-1">{post.content}</li>)}
-                            </ul>
+                    </div>
+                )}
+
+                {!postsLoading && posts.length > 0 && (
+                    <div>
+                        <h3 className="text-xl font-semibold text-gray-800 mb-4">Пости</h3>
+                        <div className="space-y-2">
+                            {posts.map((post) => (
+                                <div
+                                    key={post.id}
+                                    className="p-3 border rounded-md cursor-pointer bg-white hover:bg-blue-100 transition"
+                                >
+                                    {post.title}
+                                </div>
+                            ))}
                         </div>
-                    )}
-                </div>
-            ) : (
-                query.length >= 3 && <p className="text-gray-500 mt-2 text-center">Нічого не знайдено</p>
+                    </div>
+                )}
+
+                {!usersLoading && !groupsLoading && !postsLoading &&
+                    users.length === 0 && groups.length === 0 && posts.length === 0 && (
+                        <p className="text-gray-500 text-center">Нічого не знайдено</p>
+                )}
+            </div>
             )}
         </div>
     );

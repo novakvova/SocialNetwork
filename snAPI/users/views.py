@@ -1,13 +1,17 @@
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, filters
 from drf_yasg.utils import swagger_auto_schema
-from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
+from rest_framework.viewsets import ModelViewSet
+from django_filters.rest_framework import DjangoFilterBackend
+from users.models import UserProfile
+from .serializers import UserProfileSerializer, UserSerializer, RegisterSerializer, LoginSerializer
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from drf_yasg import openapi
 from rest_framework.generics import RetrieveAPIView
+
 class UserList(APIView):
     @swagger_auto_schema(
         responses={200: UserSerializer(many=True)},
@@ -67,3 +71,10 @@ class LoginView(APIView):
             }, status=status.HTTP_200_OK)
         
         return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+class UserViewSet(ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['email']
+    search_fields = ['username', 'email', 'profile__phone_number']

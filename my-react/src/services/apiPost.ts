@@ -18,7 +18,7 @@ export const apiPosts = createApi({
     tagTypes: ["Post", "Comments"],
     endpoints: (builder) => ({
         getPosts: builder.query<Post[], void>({
-            query: () => 'posts/posts/',
+            query: () => '/posts/',
             providesTags: ["Post"],
         }),
         likePost: builder.mutation<void, number>({
