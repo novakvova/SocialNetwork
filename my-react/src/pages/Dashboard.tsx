@@ -12,7 +12,7 @@ const Dashboard: React.FC = () => {
     };
 
     return (
-        <div className="container mx-auto p-6">
+        <div className="max-w-4xl mx-auto">
             <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
             <div className="bg-white shadow-md rounded-lg p-6">
                 <p><strong>Витрачений час:</strong> {activities.timeSpent}</p>

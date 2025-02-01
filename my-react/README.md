@@ -11,6 +11,7 @@ npm install antd@latest
 npm install --save react-infinite-scroll-component
 npm install socket.io-client
 npm install @types/socket.io-client --save-dev
+npm instal flowbite-react
 
 npm i axios
 cd my-react

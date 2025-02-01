@@ -7,7 +7,6 @@ import {
     ArrowRightStartOnRectangleIcon,
     ArrowLeftEndOnRectangleIcon,
     IdentificationIcon,
-    PlusIcon,
 
 } from '@heroicons/react/24/solid';
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
