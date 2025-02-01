@@ -7,14 +7,14 @@ export const api = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: APP_ENV.REMOTE_BASE_URL }),
     endpoints: (builder) => ({
         getContacts: builder.query<Contact[], void>({
-            query: () => 'users',
+            query: () => 'users/users',
         }),      
         getUser: builder.query<Contact, number>({
-            query: (id) => `users/${id}/`,
+            query: (id) => `users/users/${id}/`,
         }),
         registerUser: builder.mutation({
             query: (data: RegisterField) => ({
-              url: "register/", 
+              url: "users/register/", 
               method: "POST",
               body: {
                 username: data.username,
@@ -29,7 +29,7 @@ export const api = createApi({
         }),
         loginUser: builder.mutation({
             query: (data: { email: string; password: string }) => ({
-                url: "login/",
+                url: "users/login/",
                 method: "POST",
                 body: data,
             }),
