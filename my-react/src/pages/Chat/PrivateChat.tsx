@@ -1,25 +1,38 @@
-import  { useState } from 'react';
-import { useCreateMessageMutation,  useGetPrivateChatQuery } from '../../services/apiChat';
+import { useState } from 'react';
+import { useCreateMessageMutation, useGetChatBySlugQuery } from '../../services/apiChat';
 import { useSelector } from 'react-redux';
 import { RootState } from "../../redux/store";
 import { Input, Button, Spin, notification } from 'antd';
 import CreateChatComponent from './CreateChat';
 import ChatMessages from './ChatMessages';
 import { SendOutlined } from '@ant-design/icons';
+
 const PrivateChat = ({ selectedContactId }: { selectedContactId: number }) => {
     const [messageContent, setMessageContent] = useState('');
     const [createMessage, { isLoading: isSending }] = useCreateMessageMutation();
     const userId = useSelector((state: RootState) => state.account.account?.id);
-    const { data, isLoading: isChatLoading, error: chatError, refetch: refetchGroupId} = useGetPrivateChatQuery(selectedContactId);
-    const chatId = data?.[0]?.id; 
+    
+    // Створюємо два варіанти слагу
+    const slug1 = `${selectedContactId}-${userId}`;
+    const slug2 = `${userId}-${selectedContactId}`;
 
+    const { data: chatData1, isLoading: isChatLoading1, error: chatError1 } = useGetChatBySlugQuery(slug1, { skip: !userId });
+    const { data: chatData2, isLoading: isChatLoading2, error: chatError2 } = useGetChatBySlugQuery(slug2, { skip: !userId });
+
+    // Перевіряємо, який запит повернув чат
+    const chatData = chatData1 || chatData2;
+    const chatId = chatData?.id;
+    const isChatLoading = isChatLoading1 || isChatLoading2;
+
+    // Помилка лише якщо обидва запити не вдалися
+    const chatError = !chatData1 && !chatData2 && (chatError1 || chatError2);
     const handleSendMessage = async () => {
       if (messageContent.trim()) {
         if (!userId) {
           notification.error({ message: 'User not authenticated', description: 'Please log in to send messages.' });
           return;
         }
-  
+
         try {
           await createMessage({
             chat: chatId,
@@ -33,28 +46,37 @@ const PrivateChat = ({ selectedContactId }: { selectedContactId: number }) => {
         }
       }
     };
-    const handleChatMessadge = () => {
-        if(chatId){
+
+    const handleChatMessage = () => {
+        if (chatId) {
             return <ChatMessages chatId={Number(chatId)} />;
         }
-    }
-  
+    };
+
     if (isChatLoading) return <Spin size="large" />;
-    if (chatId === undefined) {
-      return (<CreateChatComponent group={Number(undefined)} participants={[Number(selectedContactId)] } is_group={false} refetch={refetchGroupId}/> )
+    
+    // Якщо чат не знайдений, створюємо новий
+    if (!chatData) {
+      return (
+        <CreateChatComponent 
+          group_name={String(undefined)} 
+          participants={[Number(selectedContactId), Number(userId)]} 
+          is_group={false} 
+          refetch={() => {}}
+        />
+      );
     }
-  
+
     return (
       <div className="chat-box">
-        {/* Вставляємо компонент ChatMessages */}
         <div className="messages-list" style={{ padding: '20px', height: '400px', overflowY: 'auto' }}>
           {chatError ? (
             <Spin size="large" />
           ) : (
-            handleChatMessadge()
+            handleChatMessage()
           )}
         </div>
-  
+
         <div className="message-input" style={{ padding: '10px', display: 'flex', alignItems: 'center' }}>
           <Input
             value={messageContent}

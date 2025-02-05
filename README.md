@@ -52,6 +52,8 @@ py manage.py shell
 cd snAPI
 py manage.py runserver 9178
 deactivate
+py manage.py makemigrations
+python manage.py migrate
 pip install Pillow
 pip install djangorestframework
 pip install djangorestframework djangorestframework-simplejwt

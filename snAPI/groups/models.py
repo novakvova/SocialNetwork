@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 class Group(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField(blank=True, null=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="created_groups")
+    created_by = models.ForeignKey(User, related_name="created_groups", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     image = models.ImageField(upload_to='group_images/', null=True, blank=True)    

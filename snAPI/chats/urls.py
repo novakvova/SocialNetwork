@@ -7,4 +7,3 @@ router.register(r'chats', ChatViewSet, basename='chat')
 router.register(r'messages', MessageViewSet, basename='message')
 
 urlpatterns = router.urls
-

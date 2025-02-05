@@ -11,7 +11,7 @@ export interface IGroupItem {
     id: number;
     name: string;
     description: string;
-    created_by: string;
+    created_detail_by: number;
     image?: string;
 }
 
@@ -39,7 +39,8 @@ export interface IChatItem {
     id: number;
     is_group: boolean; 
     participants: number[];
-    group: number;
+    slug: string;
+    group_name: string;
     messages: [
       {
         id: number,
@@ -54,7 +55,8 @@ export interface IChatItem {
   export interface IChatPostRequest {
     is_group: boolean; 
     participants: number[];
-    group: number;
+    slug: string;
+    group_name: string;
   }
   
   export interface IMessageItem {

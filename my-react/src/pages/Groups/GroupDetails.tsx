@@ -1,11 +1,12 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetGroupMembersQuery, useGetGroupQuery, useJoinGroupMutation, useLeaveGroupMutation } from '../../services/apiGroup';
-import { Spin, Alert, Button, notification, Card, Dropdown, Menu } from 'antd';
+import { Spin, Alert, Button, notification, Card, Dropdown } from 'antd';
 import { ArrowLeftOutlined, DownOutlined } from '@ant-design/icons';
 import ChatBox from '../Chat/ChatBox';
 import { RootState } from "../../redux/store";
 import { useSelector } from 'react-redux';
 import defaultProfile from "../../assets/images/ItGram.webp";
+import type { MenuProps } from 'antd';
 
 const GroupDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -41,17 +42,14 @@ const GroupDetailsPage: React.FC = () => {
     return <div className="flex justify-center items-center h-screen"><Alert message="Помилка завантаження" description="Щось пішло не так, спробуйте ще раз." type="error" showIcon /></div>;
   }
 
-  const membersMenu = (
-    <Menu>
-      {groupMembers?.members?.length ? (
-        groupMembers.members.map((member) => (
-          <Menu.Item key={member.id}>{member.username}</Menu.Item>
-        ))
-      ) : (
-        <Menu.Item disabled>У групі ще немає учасників.</Menu.Item>
-      )}
-    </Menu>
-  );
+  const membersMenu: MenuProps = {
+    items: groupMembers?.members?.length
+      ? groupMembers.members.map((member) => ({
+          key: member.id.toString(),
+          label: member.username,
+        }))
+      : [{ key: "no-members", label: "У групі ще немає учасників.", disabled: true }],
+  };
 
   return (
     <div className="max-w-4xl mx-auto py-2">
@@ -69,7 +67,7 @@ const GroupDetailsPage: React.FC = () => {
               ) : (
                 <Button type="primary" onClick={() => handleAction(groupId, "join")}>Приєднатися</Button>
               )}
-              <Dropdown overlay={membersMenu} trigger={['click']}>
+              <Dropdown menu={membersMenu} trigger={['click']}>
                 <Button className="mt-2">Учасники <DownOutlined /></Button>
               </Dropdown>
             </div>

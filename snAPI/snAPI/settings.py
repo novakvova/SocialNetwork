@@ -43,10 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_filters',
-    'users', 
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_yasg',
+    "channels",
+    'users', 
     'groups',
     'posts',
     'chats',
@@ -170,3 +171,11 @@ CORS_ALLOWED_ORIGINS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
+
+ASGI_APPLICATION = "snAPI.asgi.application"

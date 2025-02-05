@@ -48,14 +48,17 @@ const Navbar: React.FC = () => {
                         <HomeIcon className="icon h-5 w-5" />
                         <span>Home</span>
                     </Link>
-                    <Link
-                        to="/contacts"
-                        className={`flex items-center space-x-2 ${current === '/contacts' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
-                        onClick={() => handleMenuClick('/contacts')}
-                    >
-                        <UserGroupIcon className="icon h-5 w-5" />
-                        <span>Contacts</span>
-                    </Link>
+                    {isAuth && (
+                                         
+                        <Link
+                            to="/contacts"
+                            className={`flex items-center space-x-2 ${current === '/contacts' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
+                            onClick={() => handleMenuClick('/contacts')}
+                        >
+                            <UserGroupIcon className="icon h-5 w-5" />
+                            <span>Contacts</span>
+                        </Link>
+                    )}
                     <Link
                         to="/groups"
                         className={`flex items-center space-x-2 ${current === '/contacts' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
@@ -64,7 +67,6 @@ const Navbar: React.FC = () => {
                         <UserGroupIcon className="icon h-5 w-5" />
                         <span>Groups</span>
                     </Link>
-                    
                     <Link
                         to="/settings"
                         className={`flex items-center space-x-2 ${current === '/settings' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
@@ -73,14 +75,16 @@ const Navbar: React.FC = () => {
                         <AdjustmentsHorizontalIcon className="icon h-5 w-5" />
                         <span>About</span>
                     </Link>
-                    <Link
-                        to="/search"
-                        className={`flex items-center space-x-2 ${current === '/search' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
-                        onClick={() => handleMenuClick('/search')}
-                    >
-                        <MagnifyingGlassIcon className="icon h-5 w-5" />
-                        <span>Search</span>
-                    </Link>
+                    {isAuth && (
+                        <Link
+                            to="/search"
+                            className={`flex items-center space-x-2 ${current === '/search' ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
+                            onClick={() => handleMenuClick('/search')}
+                        >
+                            <MagnifyingGlassIcon className="icon h-5 w-5" />
+                            <span>Search</span>
+                        </Link>
+                    )}
                     
                 </nav>
                 
@@ -96,14 +100,15 @@ const Navbar: React.FC = () => {
                             >
                                 <span className="text-gray-600">Hello, {data?.username}</span>
                             </Link>
-                            <button 
+                            <Link 
+                                to="/"
                                 type="button" 
                                 onClick={handleLogout}
                                 className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
                             >
                                 <ArrowRightStartOnRectangleIcon className="icon h-5 w-5" />
                                 <span>Logout</span>
-                            </button>
+                            </Link>
                         </>
                     ) : (
                         <>

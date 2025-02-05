@@ -1,17 +1,19 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useGetChatByGroupIdQuery, useCreateMessageMutation } from '../../services/apiChat';
+import { useGetChatBySlugQuery, useCreateMessageMutation } from '../../services/apiChat';
 import { Input, Button, Spin, notification } from 'antd';
 import { SendOutlined } from '@ant-design/icons';
 import { RootState } from "../../redux/store";
 import ChatMessages from './ChatMessages'; 
 import CreateChatComponent from './CreateChat';
+import { useGetGroupQuery } from '../../services/apiGroup';
 
 const ChatBox = ({ group }: { group: number }) => {
   const [messageContent, setMessageContent] = useState('');
-  const { data, isLoading: isChatLoading, error: chatError, refetch: refetchGroupId} = useGetChatByGroupIdQuery(group);
+  const { data: groupData} = useGetGroupQuery(group);
+  const { data, isLoading: isChatLoading, error: chatError, refetch: refetchGroupId} = useGetChatBySlugQuery(String(groupData?.name), { skip: !group });
   const [createMessage, { isLoading: isSending }] = useCreateMessageMutation();
-  const chatId = data?.[0]?.id; 
+  const chatId = data?.id; 
   const userId = useSelector((state: RootState) => state.account.account?.id);
 
   const handleSendMessage = async () => {
@@ -37,7 +39,7 @@ const ChatBox = ({ group }: { group: number }) => {
 
   if (isChatLoading) return <Spin size="large" />;
   if (chatId === undefined) {
-    return (<CreateChatComponent group={Number(group)} participants={[Number(userId)] } is_group={true} refetch={refetchGroupId}/> )
+    return (<CreateChatComponent group_name={String(groupData?.name)} participants={[Number(userId)] } is_group={true} refetch={refetchGroupId}/> )
   }
 
   return (

@@ -8,11 +8,13 @@ import { setAccount } from "../redux/account/accountSlice";
 import { useDispatch } from "react-redux";
 import { Col, Row } from "antd"
 import SideIntro from "../components/SideIntro";
-
-const LoginForm = () => {
+import {useNavigate } from "react-router-dom";
+    
+    const LoginForm = () => {
     const [activeTab, setActiveTab] = useState("account");
     const [loginUser] = useLoginUserMutation();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleLogin = async (values: { email: string, password: string }) => {
       try {
@@ -24,6 +26,7 @@ const LoginForm = () => {
               message.success("Успішний вхід!");
               const payload = apiToken.getPayload();
                 if (payload) dispatch(setAccount(payload));
+                navigate("/");
           } else {
               message.error("Невірний логін абjо пароль");
           }

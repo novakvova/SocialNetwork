@@ -1,15 +1,20 @@
-import { Button, Dropdown, Modal, Input, message as antdMessage } from "antd";
+import { Button, Dropdown, Modal, Input, message as antdMessage } from "antd"; 
 import { EllipsisOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useDeleteMessageMutation, useUpdateMessageMutation } from "../../services/apiChat";
 import { useGetUserQuery } from "../../services/apiUser";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const MessageItem = ({ message, refetch }: { message: { id: number; chat: number; sender: string | number; content: string; timestamp: string }, refetch: () => void, chatId: number }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(message.content);
   const [deleteMessage] = useDeleteMessageMutation();
   const [updateMessage] = useUpdateMessageMutation();
-  const user = useGetUserQuery(Number(message.sender));
+  const { data: currentUser, isLoading: userLoading } = useGetUserQuery(Number(message.sender));
+  const userId = useSelector((state: RootState) => state.account.account?.id);
+  // Перевірка, чи є користувач автором повідомлення
+  const isAuthor = Number(userId) === Number(message.sender);
 
   const handleDelete = async () => {
     try {
@@ -40,19 +45,26 @@ const MessageItem = ({ message, refetch }: { message: { id: number; chat: number
     }
   };
 
-  const menuItems = [
-    { key: "edit", label: "Змінити", onClick: () => setIsEditing(true) },
-    { key: "delete", label: "Видалити", onClick: handleDelete },
-  ];
+  // Оновлені пункти меню, залежно від того, чи є користувач автором повідомлення
+  const menuItems = isAuthor
+    ? [
+        { key: "edit", label: "Змінити", onClick: () => setIsEditing(true) },
+        { key: "delete", label: "Видалити", onClick: handleDelete },
+      ]
+    : [];
+
+  if (userLoading) return <p>Завантаження...</p>;
 
   return (
     <li className="message-item flex mb-4 p-4 border-b border-gray-300">
       <div className="flex-1 flex flex-col">
         <div className="flex justify-between items-center">
-          <p className="font-bold text-left">{user.data?.username}</p>
-          <Dropdown menu={{ items: menuItems }} trigger={["click"]}>
-            <Button icon={<EllipsisOutlined />} size="small" />
-          </Dropdown>
+          <p className="font-bold text-left">{currentUser?.username}</p>
+          {isAuthor && (
+            <Dropdown menu={{ items: menuItems }} trigger={["click"]}>
+              <Button icon={<EllipsisOutlined />} size="small" />
+            </Dropdown>
+          )}
         </div>
         <p className="text-left">{message.content}</p>
       </div>

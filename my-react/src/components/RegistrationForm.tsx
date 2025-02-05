@@ -4,12 +4,14 @@ import { RegisterField } from '../models/accounts';
 import { IRegisterFormValues } from '../models/types';
 import { Col, Row } from "antd"
 import SideIntro from "../components/SideIntro";
+import { useNavigate } from 'react-router-dom';
 
 const { Item } = Form;
 
 const Register = () => {
   const [registerUser] = useRegisterUserMutation();
   const [form] = Form.useForm<IRegisterFormValues>();
+  const navigate = useNavigate();
 
   const onFinish = async (values: IRegisterFormValues) => {
     try {
@@ -28,6 +30,7 @@ const Register = () => {
       });
 
       form.resetFields();
+      navigate("/login")
     } catch (err) {
       console.error("Помилка реєстрації:", err);
       notification.error({
